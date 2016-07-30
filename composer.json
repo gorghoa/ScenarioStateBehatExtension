@@ -1,0 +1,27 @@
+{
+    "name": "gorghoa/scenariostate-behat-extension",
+    "type": "behat-extension",
+    "description": "Scenario shared state extension for Behat",
+    "keywords": ["behat", "bdd", "stateless api testing"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rodrigue Villetard",
+            "email": "rodrigue.villetard@gmail.com"
+        }
+    ],
+
+    "require": {
+        "php":                       ">=7.0.0",
+        "behat/behat":               "^3.1"
+    },
+
+    "require-dev": {
+        "phpspec/phpspec":               "~2.0",
+        "phpunit/phpunit":               "~4.0"
+    },
+
+    "autoload": {
+        "psr-4": { "Gorghoa\\ScenarioStateBehatExtension\\": "src/" }
+    }
+}

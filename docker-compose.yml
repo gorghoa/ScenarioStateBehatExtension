@@ -1,0 +1,9 @@
+version: "2"
+
+services:
+  php:
+    tty: true
+    image: gorghoa/php7
+    command: behat
+    volumes:
+      - ./:/app
