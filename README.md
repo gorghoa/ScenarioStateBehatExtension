@@ -15,8 +15,18 @@ But, when you are testing a stateless system, chiefly an API, then the resulting
 
 ## Installation
 
-> @TODO: Publish on packagist when ready.
-> for now use the private repo composer method https://getcomposer.org/doc/05-repositories.md#using-private-repositories
+
+```bash
+composer require gorghoa/scenariostate-behat-extension @RC
+```
+
+Then update your project’s `behat.yml` config file by loading the extension:
+
+```yaml
+default:
+    extensions:
+        Gorghoa\ScenarioStateBehatExtension\ServiceContainer\ScenarioStateExtension: ~
+```
 
 ## Usage
 
@@ -32,9 +42,12 @@ Let’s say a feature like this:
 
         Scenario: Monkey gives a banana to another monkey
             When bonobo takes a banana
-            And gives this banana to "gorilla"
+            And bonobo gives this banana to "gorilla"
 
 ```
+
+See the “**this** banana”? What we want during the second step execution is a reference to the exact banana the bonobo initially took. This behat extension will help us to propagate the banana refence amongst steps.
+
 
 ### Provide state fragment
 
@@ -101,6 +114,7 @@ The easiest way to consume state fragments provided to the scenario’s state, i
      */
     public function giveBananaToGorilla($monkey, $scenarioBanana, Bonobo $scenarioBonobo)
      {
+        // (note that PHPUnit is here only given as an example, feel free to use any asserter you want)
         PHPUnit_Framework_Assert::assertEquals($monkey, 'gorilla');
         PHPUnit_Framework_Assert::assertEquals($scenarioBanana, 'Yammy Banana');
         PHPUnit_Framework_Assert::assertEquals($scenarioBonobo->getName(), 'Gerard');
