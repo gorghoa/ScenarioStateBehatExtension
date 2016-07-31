@@ -1,5 +1,7 @@
 # ScenarioStateBehatExtension
 
+[![Build Status](https://travis-ci.org/gorghoa/ScenarioStateBehatExtension.svg?branch=master)](https://travis-ci.org/gorghoa/ScenarioStateBehatExtension)
+
 ## When to use
 
 Behat scenarios are all about state. First you put the system under test

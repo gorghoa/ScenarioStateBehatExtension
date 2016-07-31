@@ -1,0 +1,9 @@
+language: php
+php:
+  - '7.0'
+
+install:
+  - phpenv config-rm xdebug.ini
+  - composer install
+
+script: ./vendor/bin/behat
