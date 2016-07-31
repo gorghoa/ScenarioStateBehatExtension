@@ -14,7 +14,7 @@ class ScenarioStateArgumentOrganiser implements ArgumentOrganiser
     private $baseOrganiser;
 
     /**
-     * @var Gorghoa\ScenarioStateBehatExtension\Context\Initializer\ScenarioStateInitializer
+     * @var ScenarioStateInitializer
      */
     private $store;
 
