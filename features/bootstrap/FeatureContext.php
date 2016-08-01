@@ -50,7 +50,7 @@ class FeatureContext implements SnippetAcceptingContext
                 $this->phpBin,
                 escapeshellarg(BEHAT_BIN_PATH),
                 $argumentsString,
-                strtr('--format-settings=\'{"timer": false}\'', ['\'' => '"', '"' => '\"'])
+                strtr('--lang=en --format-settings=\'{"timer": false}\'', ['\'' => '"', '"' => '\"'])
             )
         );
         $this->process->start();
