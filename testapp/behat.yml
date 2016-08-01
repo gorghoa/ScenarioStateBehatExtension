@@ -1,3 +1,3 @@
 default:
     extensions:
-        ../init.php: ~
+        Gorghoa\ScenarioStateBehatExtension\ServiceContainer\ScenarioStateExtension: ~

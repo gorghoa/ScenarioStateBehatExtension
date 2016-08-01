@@ -4,7 +4,6 @@
 
 ```
 composer install
-
 ```
 
 ## Launch the tests
