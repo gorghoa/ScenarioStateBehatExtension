@@ -9,5 +9,5 @@ composer install
 ## Launch the tests
 
 ```
-./vendor/bin/behat
+vendor/bin/behat
 ```
