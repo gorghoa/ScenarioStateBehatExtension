@@ -5,20 +5,18 @@ namespace Gorghoa\ScenarioStateBehatExtension\Context\Initializer;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\Initializer\ContextInitializer;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Gorghoa\ScenarioStateBehatExtension\ScenarioState;
 use Gorghoa\ScenarioStateBehatExtension\Context\ScenarioStateAwareContext;
+use Gorghoa\ScenarioStateBehatExtension\ScenarioState;
+use Gorghoa\ScenarioStateBehatExtension\ScenarioStateInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class ScenarioStateInitializer implements ContextInitializer, EventSubscriberInterface
 {
+    /**
+     * @var ScenarioStateInterface
+     */
     private $store;
 
-    /**
-     * Initializes initializer.
-     *
-     * @param KernelInterface $kernel
-     */
     public function __construct()
     {
         $this->clearStore();
@@ -29,9 +27,9 @@ final class ScenarioStateInitializer implements ContextInitializer, EventSubscri
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            ScenarioTested::AFTER => array('clearStore'),
-        );
+        return [
+            ScenarioTested::AFTER => ['clearStore'],
+        ];
     }
 
     /**
@@ -46,16 +44,14 @@ final class ScenarioStateInitializer implements ContextInitializer, EventSubscri
         $context->setScenarioState($this->store);
     }
 
-    private function getNewStore()
-    {
-        return new ScenarioState();
-    }
-
     public function clearStore()
     {
-        $this->store = $this->getNewStore();
+        $this->store = new ScenarioState();
     }
 
+    /**
+     * @return ScenarioStateInterface
+     */
     public function getStore()
     {
         return $this->store;

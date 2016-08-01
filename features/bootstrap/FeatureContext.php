@@ -5,15 +5,13 @@ use Behat\Gherkin\Node\PyStringNode;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
-/**
- * Behat context class.
- */
 class FeatureContext implements SnippetAcceptingContext
 {
     /**
      * @var string
      */
     private $phpBin;
+
     /**
      * @var Process
      */
@@ -43,7 +41,7 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function iRunBehat($argumentsString = '')
     {
-        $argumentsString = strtr($argumentsString, array('\'' => '"'));
+        $argumentsString = strtr($argumentsString, ['\'' => '"']);
 
         $this->process->setWorkingDirectory(__DIR__.'/../../testapp');
         $this->process->setCommandLine(
@@ -52,7 +50,7 @@ class FeatureContext implements SnippetAcceptingContext
                 $this->phpBin,
                 escapeshellarg(BEHAT_BIN_PATH),
                 $argumentsString,
-                strtr('--format-settings=\'{"timer": false}\'', array('\'' => '"', '"' => '\"'))
+                strtr('--format-settings=\'{"timer": false}\'', ['\'' => '"', '"' => '\"'])
             )
         );
         $this->process->start();
@@ -65,7 +63,7 @@ class FeatureContext implements SnippetAcceptingContext
      * @Then /^it should (fail|pass) with:$/
      *
      * @param string       $success "fail" or "pass"
-     * @param PyStringNode $text    PyString text instance
+     * @param PyStringNode $text PyString text instance
      */
     public function itShouldPassWith($success, PyStringNode $text)
     {
@@ -82,29 +80,40 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
-        PHPUnit_Framework_Assert::assertContains($this->getExpectedOutput($text), $this->getOutput());
+        \PHPUnit_Framework_Assert::assertContains($this->getExpectedOutput($text), $this->getOutput());
     }
 
+    /**
+     * @param PyStringNode $expectedText
+     *
+     * @return string
+     */
     private function getExpectedOutput(PyStringNode $expectedText)
     {
-        $text = strtr($expectedText, array('\'\'\'' => '"""'));
+        $text = strtr($expectedText, ['\'\'\'' => '"""']);
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback(
-                '/ features\/[^\n ]+/', function ($matches) {
+                '/ features\/[^\n ]+/',
+                function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, $text
+                },
+                $text
             );
             $text = preg_replace_callback(
-                '/\<span class\="path"\>features\/[^\<]+/', function ($matches) {
+                '/\<span class\="path"\>features\/[^\<]+/',
+                function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, $text
+                },
+                $text
             );
             $text = preg_replace_callback(
-                '/\+[fd] [^ ]+/', function ($matches) {
+                '/\+[fd] [^ ]+/',
+                function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, $text
+                },
+                $text
             );
         }
 
@@ -125,13 +134,13 @@ class FeatureContext implements SnippetAcceptingContext
                 echo 'Actual output:'.PHP_EOL.PHP_EOL.$this->getOutput();
             }
 
-            PHPUnit_Framework_Assert::assertNotEquals(0, $this->getExitCode());
+            \PHPUnit_Framework_Assert::assertNotEquals(0, $this->getExitCode());
         } else {
             if (0 !== $this->getExitCode()) {
                 echo 'Actual output:'.PHP_EOL.PHP_EOL.$this->getOutput();
             }
 
-            PHPUnit_Framework_Assert::assertEquals(0, $this->getExitCode());
+            \PHPUnit_Framework_Assert::assertEquals(0, $this->getExitCode());
         }
     }
 

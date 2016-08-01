@@ -2,7 +2,7 @@
 
 class Gorilla
 {
-    private $banana = null;
+    private $banana;
 
     public function setBanana(array $banana)
     {

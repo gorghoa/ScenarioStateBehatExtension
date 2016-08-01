@@ -4,7 +4,7 @@ Feature: Scenario shared state
   system, I need a way to store the
   scenario state
 
-  Scenario: Scenario state should be shared between steps 
+  Scenario: Scenario state should be shared between steps
     When I run "behat --no-colors features/monkey.feature"
     Then it should pass with:
         """

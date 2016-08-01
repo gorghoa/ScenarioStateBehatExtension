@@ -5,20 +5,20 @@ namespace Gorghoa\ScenarioStateBehatExtension;
 interface ScenarioStateInterface
 {
     /**
-     * @var string
-     * @var mixed  $value
+     * @param string $key
+     * @param mixed  $value
      */
     public function provideStateFragment($key, $value);
 
     /**
-     * @var string
+     * @param string $key
      *
      * @return mixed
      */
     public function getStateFragment($key);
 
     /**
-     * @var string
+     * @param string $key
      *
      * @return bool
      */

@@ -4,9 +4,6 @@ namespace Gorghoa\ScenarioStateBehatExtension;
 
 class ScenarioState implements ScenarioStateInterface
 {
-    /**
-     * @var array
-     */
     private $store = [];
 
     /**
