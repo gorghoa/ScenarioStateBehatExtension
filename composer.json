@@ -13,7 +13,8 @@
 
     "require": {
         "php": ">=5.5",
-        "behat/behat": "^3.0"
+        "behat/behat": "^3.0.12",
+        "symfony/process": "^2.0"
     },
 
     "require-dev": {
@@ -22,6 +23,9 @@
     },
 
     "autoload": {
-        "psr-4": { "Gorghoa\\ScenarioStateBehatExtension\\": "src/" }
+        "psr-4": {
+            "Gorghoa\\ScenarioStateBehatExtension\\": "src/",
+            "Symfony\\Component\\Process\\": "vendor/symfony/process/"
+        }
     }
 }

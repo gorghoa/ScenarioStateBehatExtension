@@ -65,8 +65,7 @@ class FeatureContext implements SnippetAcceptingContext
                 strtr('--lang=en --format-settings=\'{"timer": false}\'', ['\'' => '"', '"' => '\"'])
             )
         );
-        $this->process->start();
-        $this->process->wait();
+        $this->process->run();
     }
 
     /**
