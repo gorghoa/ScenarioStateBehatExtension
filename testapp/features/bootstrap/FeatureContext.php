@@ -1,18 +1,26 @@
 <?php
 
+/*
+ * This file is part of the ScenarioStateBehatExtension project.
+ *
+ * (c) Rodrigue Villetard <rodrigue.villetard@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 require_once __DIR__.'/../../Gorilla.php';
 
-use Behat\Behat\Context\Context;
 use Gorghoa\ScenarioStateBehatExtension\Context\ScenarioStateAwareContext;
 use Gorghoa\ScenarioStateBehatExtension\ScenarioStateInterface;
 
 /**
- * Behat context class.
+ * @author Rodrigue Villetard <rodrigue.villetard@gmail.com>
  */
 class FeatureContext implements ScenarioStateAwareContext
 {
     /**
-     * @var Gorghoa\ScenarioStateBehatExtension\ScenarioStateInterface
+     * @var ScenarioStateInterface
      */
     private $scenarioState;
 
@@ -31,10 +39,12 @@ class FeatureContext implements ScenarioStateAwareContext
 
     /**
      * @When gives this banana to gorilla
+     *
+     * @param string $scenarioBanana
      */
     public function giveBananaToGorilla($scenarioBanana)
     {
-        PHPUnit_Framework_Assert::assertEquals($scenarioBanana, ['Yammy Banana']);
+        \PHPUnit_Framework_Assert::assertEquals($scenarioBanana, ['Yammy Banana']);
         $gorilla = new Gorilla();
         $gorilla->setBanana($scenarioBanana);
         $this->scenarioState->provideStateFragment('scenarioGorilla', $gorilla);
@@ -42,10 +52,13 @@ class FeatureContext implements ScenarioStateAwareContext
 
     /**
      * @Then the gorilla has the banana
+     *
+     * @param string  $scenarioBanana
+     * @param Gorilla $scenarioGorilla
      */
-    public function gorillaHasBanana($scenarioBanana, $scenarioGorilla)
+    public function gorillaHasBanana($scenarioBanana, Gorilla $scenarioGorilla)
     {
-        PHPUnit_Framework_Assert::assertEquals($scenarioBanana, ['Yammy Banana']);
-        PHPUnit_Framework_Assert::assertEquals($scenarioGorilla->getBanana(), ['Yammy Banana']);
+        \PHPUnit_Framework_Assert::assertEquals($scenarioBanana, ['Yammy Banana']);
+        \PHPUnit_Framework_Assert::assertEquals($scenarioGorilla->getBanana(), ['Yammy Banana']);
     }
 }

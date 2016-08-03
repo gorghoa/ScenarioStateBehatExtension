@@ -1,24 +1,36 @@
 <?php
 
+/*
+ * This file is part of the ScenarioStateBehatExtension project.
+ *
+ * (c) Rodrigue Villetard <rodrigue.villetard@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Gorghoa\ScenarioStateBehatExtension;
 
+/**
+ * @author Rodrigue Villetard <rodrigue.villetard@gmail.com>
+ */
 interface ScenarioStateInterface
 {
     /**
-     * @var string
-     * @var mixed  $value
+     * @param string $key
+     * @param mixed  $value
      */
     public function provideStateFragment($key, $value);
 
     /**
-     * @var string
+     * @param string $key
      *
      * @return mixed
      */
     public function getStateFragment($key);
 
     /**
-     * @var string
+     * @param string $key
      *
      * @return bool
      */
