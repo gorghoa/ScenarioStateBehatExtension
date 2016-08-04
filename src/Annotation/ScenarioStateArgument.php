@@ -17,7 +17,7 @@ namespace Gorghoa\ScenarioStateBehatExtension\Annotation;
  * @Annotation
  * @Target("METHOD")
  */
-final class ScenarioStateArgument
+class ScenarioStateArgument
 {
     /**
      * Argument name in store.
@@ -49,5 +49,21 @@ final class ScenarioStateArgument
         }
         $this->name = $options['name'];
         $this->argument = isset($options['argument']) ? $options['argument'] : $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getArgument()
+    {
+        return $this->argument;
     }
 }

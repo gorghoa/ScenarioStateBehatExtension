@@ -12,7 +12,7 @@
 namespace Gorghoa\ScenarioStateBehatExtension;
 
 use Behat\Testwork\Argument\ArgumentOrganiser;
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
 use Gorghoa\ScenarioStateBehatExtension\Context\Initializer\ScenarioStateInitializer;
 use ReflectionFunctionAbstract;
@@ -25,11 +25,13 @@ final class ScenarioStateArgumentOrganiser implements ArgumentOrganiser
 {
     private $baseOrganiser;
     private $store;
+    private $reader;
 
-    public function __construct(ArgumentOrganiser $organiser, ScenarioStateInitializer $store)
+    public function __construct(ArgumentOrganiser $organiser, ScenarioStateInitializer $store, Reader $reader)
     {
         $this->baseOrganiser = $organiser;
         $this->store = $store;
+        $this->reader = $reader;
     }
 
     /**
@@ -43,22 +45,16 @@ final class ScenarioStateArgumentOrganiser implements ArgumentOrganiser
         }, $function->getParameters());
 
         $store = $this->store->getStore();
-        $reader = new AnnotationReader();
-
-        // Ignore Behat annotations
-        $reader::addGlobalIgnoredName('Given');
-        $reader::addGlobalIgnoredName('When');
-        $reader::addGlobalIgnoredName('Then');
 
         /** @var ScenarioStateArgument[] $annotations */
-        $annotations = $reader->getMethodAnnotations($function);
+        $annotations = $this->reader->getMethodAnnotations($function);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof ScenarioStateArgument &&
-                in_array($annotation->argument, $paramsKeys) &&
-                $store->hasStateFragment($annotation->name)
+                in_array($annotation->getArgument(), $paramsKeys) &&
+                $store->hasStateFragment($annotation->getName())
             ) {
-                $match[$annotation->argument] = $store->getStateFragment($annotation->name);
-                $match[strval(++$i)] = $store->getStateFragment($annotation->name);
+                $match[$annotation->getArgument()] = $store->getStateFragment($annotation->getName());
+                $match[strval(++$i)] = $store->getStateFragment($annotation->getName());
             }
         }
 

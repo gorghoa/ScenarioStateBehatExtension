@@ -16,6 +16,7 @@ use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Gorghoa\ScenarioStateBehatExtension\Context\Initializer\ScenarioStateInitializer;
 use Gorghoa\ScenarioStateBehatExtension\ScenarioStateArgumentOrganiser;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -82,12 +83,20 @@ class ScenarioStateExtension implements ExtensionInterface
 
     private function loadOrganiser(ContainerBuilder $container)
     {
+        // Declare Doctrine annotation reader as service
+        $container->register('doctrine.reader.annotation', AnnotationReader::class)
+            // Ignore Behat annotations in reader
+            ->addMethodCall('addGlobalIgnoredName', ['Given'])
+            ->addMethodCall('addGlobalIgnoredName', ['When'])
+            ->addMethodCall('addGlobalIgnoredName', ['Then']);
+
         $container->register(self::SCENARIO_STATE_ARGUMENT_ORGANISER_ID, ScenarioStateArgumentOrganiser::class)
             ->setDecoratedService(ArgumentExtension::PREG_MATCH_ARGUMENT_ORGANISER_ID)
             ->setPublic(false)
             ->setArguments([
                 new Reference(sprintf('%s.inner', self::SCENARIO_STATE_ARGUMENT_ORGANISER_ID)),
                 new Reference('behatstore.context_initializer.store_aware'),
+                new Reference('doctrine.reader.annotation'),
             ]);
     }
 }
