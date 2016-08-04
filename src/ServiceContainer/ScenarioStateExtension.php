@@ -12,7 +12,6 @@
 namespace Gorghoa\ScenarioStateBehatExtension\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
-use Behat\Testwork\Argument\PregMatchArgumentOrganiser;
 use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
@@ -28,9 +27,12 @@ use Symfony\Component\DependencyInjection\Reference;
  * Behat store for Behat contexts.
  *
  * @author Rodrigue Villetard <rodrigue.villetard@gmail.com>
+ * @author Vincent Chalamon <vincentchalamon@gmail.com>
  */
 class ScenarioStateExtension implements ExtensionInterface
 {
+    const SCENARIO_STATE_ARGUMENT_ORGANISER_ID = 'argument.scenario_state_organiser';
+
     /**
      * {@inheritdoc}
      */
@@ -74,20 +76,18 @@ class ScenarioStateExtension implements ExtensionInterface
         $definition = new Definition(ScenarioStateInitializer::class, []);
         $definition->addTag(ContextExtension::INITIALIZER_TAG, ['priority' => 0]);
         $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, ['priority' => 0]);
+
         $container->setDefinition('behatstore.context_initializer.store_aware', $definition);
     }
 
     private function loadOrganiser(ContainerBuilder $container)
     {
-        $definition = new Definition(PregMatchArgumentOrganiser::class, [
-            new Reference(ArgumentExtension::MIXED_ARGUMENT_ORGANISER_ID),
-        ]);
-        $container->setDefinition(ArgumentExtension::PREG_MATCH_ARGUMENT_ORGANISER_ID.'.overriden', $definition);
-
-        $definition = new Definition(ScenarioStateArgumentOrganiser::class, [
-            new Reference(ArgumentExtension::PREG_MATCH_ARGUMENT_ORGANISER_ID.'.overriden'),
-            new Reference('behatstore.context_initializer.store_aware'),
-        ]);
-        $container->setDefinition(ArgumentExtension::PREG_MATCH_ARGUMENT_ORGANISER_ID, $definition);
+        $container->register(self::SCENARIO_STATE_ARGUMENT_ORGANISER_ID, ScenarioStateArgumentOrganiser::class)
+            ->setDecoratedService(ArgumentExtension::PREG_MATCH_ARGUMENT_ORGANISER_ID)
+            ->setPublic(false)
+            ->setArguments([
+                new Reference(sprintf('%s.inner', self::SCENARIO_STATE_ARGUMENT_ORGANISER_ID)),
+                new Reference('behatstore.context_initializer.store_aware'),
+            ]);
     }
 }
