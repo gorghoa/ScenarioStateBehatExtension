@@ -17,7 +17,7 @@ But, when you are testing a stateless system, chiefly an API, then the resulting
 
 
 ```bash
-composer require gorghoa/scenariostate-behat-extension @RC
+composer require --dev gorghoa/scenariostate-behat-extension @RC
 ```
 
 Then update your project's `behat.yml` config file by loading the extension:
@@ -56,19 +56,12 @@ This interface declare one method to implement: `public function setScenarioStat
 
 ```php
 use Gorghoa\ScenarioStateBehatExtension\Context\ScenarioStateAwareContext;
+use Gorghoa\ScenarioStateBehatExtension\Context\ScenarioStateAwareTrait;
 use Gorghoa\ScenarioStateBehatExtension\ScenarioStateInterface;
 
 class FeatureContext implements ScenarioStateAwareContext
 {
-    /**
-     * @var ScenarioStateInterface
-     */
-    private $scenarioState;
-
-    public function setScenarioState(ScenarioStateInterface $scenarioState)
-    {
-        $this->scenarioState = $scenarioState;
-    }
+    use ScenarioStateAwareTrait;
 }
 ```
 
@@ -106,9 +99,9 @@ The easiest way to consume state fragments provided to the scenario's state, is 
 public function giveBananaToGorilla($monkey, $scenarioBanana, Bonobo $scenarioBonobo)
 {
     // (note that PHPUnit is here only given as an example, feel free to use any asserter you want)
-    PHPUnit_Framework_Assert::assertEquals($monkey, 'gorilla');
-    PHPUnit_Framework_Assert::assertEquals($scenarioBanana, 'Yammy Banana');
-    PHPUnit_Framework_Assert::assertEquals($scenarioBonobo->getName(), 'Gerard');
+    \PHPUnit_Framework_Assert::assertEquals($monkey, 'gorilla');
+    \PHPUnit_Framework_Assert::assertEquals($scenarioBanana, 'Yammy Banana');
+    \PHPUnit_Framework_Assert::assertEquals($scenarioBonobo->getName(), 'Gerard');
 }
 ```
 
