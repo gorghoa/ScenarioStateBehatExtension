@@ -50,15 +50,15 @@ final class ScenarioStateArgumentOrganiser implements ArgumentOrganiser
         $reader::addGlobalIgnoredName('When');
         $reader::addGlobalIgnoredName('Then');
 
-        if (null !== ($annotation = $reader->getMethodAnnotation($function, ScenarioStateArgument::class))) {
-            foreach ($paramsKeys as $key) {
-                if (in_array($key, $annotation->mapping)) {
-                    $key = array_search($key, $annotation->mapping);
-                    if ($store->hasStateFragment($key)) {
-                        $match[$key] = $store->getStateFragment($key);
-                        $match[strval(++$i)] = $store->getStateFragment($key);
-                    }
-                }
+        /** @var ScenarioStateArgument[] $annotations */
+        $annotations = $reader->getMethodAnnotations($function);
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof ScenarioStateArgument &&
+                in_array($annotation->argument, $paramsKeys) &&
+                $store->hasStateFragment($annotation->name)
+            ) {
+                $match[$annotation->argument] = $store->getStateFragment($annotation->name);
+                $match[strval(++$i)] = $store->getStateFragment($annotation->name);
             }
         }
 

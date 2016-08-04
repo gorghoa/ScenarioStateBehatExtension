@@ -20,13 +20,6 @@ namespace Gorghoa\ScenarioStateBehatExtension\Annotation;
 final class ScenarioStateArgument
 {
     /**
-     * Map arguments from store to method arguments.
-     *
-     * @var array
-     */
-    public $mapping = [];
-
-    /**
      * Argument name in store.
      *
      * @var string
@@ -49,20 +42,12 @@ final class ScenarioStateArgument
             $options['name'] = $options['value'];
             unset($options['value']);
         }
-        if (!isset($options['mapping']) && (!isset($options['name']) || empty(trim($options['name'])))) {
+        if (!isset($options['name']) || empty(trim($options['name']))) {
             throw new \InvalidArgumentException(
                 'You must provide the store argument name in ScenarioStateArgument annotation'
             );
         }
-        if (isset($options['mapping'])) {
-            foreach ($options['mapping'] as $key => $value) {
-                if (is_int($key)) {
-                    $key = $value;
-                }
-                $this->mapping[$key] = $value;
-            }
-        } elseif (isset($options['name'])) {
-            $this->mapping[$options['name']] = isset($options['argument']) ? $options['argument'] : $options['name'];
-        }
+        $this->name = $options['name'];
+        $this->argument = isset($options['argument']) ? $options['argument'] : $this->name;
     }
 }

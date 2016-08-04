@@ -56,7 +56,8 @@ class FeatureContext implements ScenarioStateAwareContext
     /**
      * @Then the gorilla has the banana
      *
-     * @ScenarioStateArgument(mapping={"scenarioGorilla"="gorilla", "scenarioBanana"})
+     * @ScenarioStateArgument("scenarioBanana")
+     * @ScenarioStateArgument(name="scenarioGorilla", argument="gorilla")
      *
      * @param string  $scenarioBanana
      * @param Gorilla $gorilla

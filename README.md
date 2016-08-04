@@ -93,11 +93,10 @@ public function takeBanana()
 ### Consuming state fragments
 
 To consume state fragments provided to the scenario's state, you must add needed arguments to step's methods using
-`ScenarioStateArgument` annotation. It can be used in many ways:
+`ScenarioStateArgument` annotation. It can be used easily:
 
-- inject 1 argument from store with the exact same name: `@ScenarioStateArgument("scenarioBanana")` or `@ScenarioStateArgument(name="scenarioBanana")`
-- inject 1 argument from store changing its name: `@ScenarioStateArgument(name="scenarioBanana", argument="banana")`
-- inject multiple arguments from store: `@ScenarioStateArgument(mapping={"scenarioBanana", scenarioBonobo="bonobo"})`
+- inject argument from store with the exact same name: `@ScenarioStateArgument("scenarioBanana")` or `@ScenarioStateArgument(name="scenarioBanana")`
+- inject argument from store changing its name: `@ScenarioStateArgument(name="scenarioBanana", argument="banana")`
 
 ```php
 use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
@@ -105,7 +104,8 @@ use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
 /**
  * @When bonobo gives this banana to :monkey
  *
- * @ScenarioStateArgument(mapping={"scenarioBanana", scenarioBonobo="bonobo"})
+ * @ScenarioStateArgument("scenarioBanana")
+ * @ScenarioStateArgument(name="scenarioBonobo", argument="bonobo")
  *
  * @param string $monkey
  * @param string $scenarioBanana
