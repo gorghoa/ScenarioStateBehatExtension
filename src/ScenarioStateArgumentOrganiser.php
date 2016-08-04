@@ -12,11 +12,14 @@
 namespace Gorghoa\ScenarioStateBehatExtension;
 
 use Behat\Testwork\Argument\ArgumentOrganiser;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
 use Gorghoa\ScenarioStateBehatExtension\Context\Initializer\ScenarioStateInitializer;
 use ReflectionFunctionAbstract;
 
 /**
  * @author Rodrigue Villetard <rodrigue.villetard@gmail.com>
+ * @author Vincent Chalamon <vincentchalamon@gmail.com>
  */
 final class ScenarioStateArgumentOrganiser implements ArgumentOrganiser
 {
@@ -34,21 +37,28 @@ final class ScenarioStateArgumentOrganiser implements ArgumentOrganiser
      */
     public function organiseArguments(ReflectionFunctionAbstract $function, array $match)
     {
-        $store = $this->store->getStore();
-
-        //@todo, be more defensive
         $i = array_slice(array_keys($match), -1, 1)[0];
-
-        $parameters = $function->getParameters();
-
         $paramsKeys = array_map(function ($element) {
             return $element->name;
-        }, $parameters);
+        }, $function->getParameters());
 
-        foreach ($paramsKeys as $key) {
-            if ($store->hasStateFragment($key)) {
-                $match[$key] = $store->getStateFragment($key);
-                $match[strval(++$i)] = $store->getStateFragment($key);
+        $store = $this->store->getStore();
+        $reader = new AnnotationReader();
+
+        // Ignore Behat annotations
+        $reader::addGlobalIgnoredName('Given');
+        $reader::addGlobalIgnoredName('When');
+        $reader::addGlobalIgnoredName('Then');
+
+        if (null !== ($annotation = $reader->getMethodAnnotation($function, ScenarioStateArgument::class))) {
+            foreach ($paramsKeys as $key) {
+                if (in_array($key, $annotation->mapping)) {
+                    $key = array_search($key, $annotation->mapping);
+                    if ($store->hasStateFragment($key)) {
+                        $match[$key] = $store->getStateFragment($key);
+                        $match[strval(++$i)] = $store->getStateFragment($key);
+                    }
+                }
             }
         }
 

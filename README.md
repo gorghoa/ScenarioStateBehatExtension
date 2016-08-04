@@ -9,9 +9,11 @@ to a special state through the `Given` steps. Then you continue to manipulate
 your system through `When` steps and finally testing the resulting state via
 the `Then` steps.
 
-When testing a system like a single page app or a statefull website, the resulting state of our steps is handled by the system itself (either by the browser, or by the php session, etc.).
+When testing a system like a single page app or a stateful website, the resulting state of our steps is handled by the
+system itself (either by the browser, or by the php session, etc.).
 
-But, when you are testing a stateless system, chiefly an API, then the resulting state of our steps is handled by no one. This is the case for this extension.
+But, when you are testing a stateless system, chiefly an API, then the resulting state of our steps is handled by no
+one. This is the case for this extension.
 
 ## Installation
 
@@ -30,7 +32,7 @@ default:
 
 ## Usage
 
-This behat extension will allow scenarios steps to provide and consume what I call “fragments” of the resulting state.
+This behat extension will allow scenarios steps to provide and consume what I call "fragments" of the resulting state.
 
 Each scenario get it's own isolated and unique state.
 
@@ -45,14 +47,17 @@ Let's say a feature like this:
             And bonobo gives this banana to "gorilla"
 ```
 
-See the “**this** banana”? What we want during the second step execution is a reference to the exact banana the bonobo initially took. This behat extension will help us to propagate the banana refence amongst steps.
+See the "**this** banana"? What we want during the second step execution is a reference to the exact banana the bonobo
+initially took. This behat extension will help us to propagate the banana refence amongst steps.
 
 
 ### Provide state fragment
 
-To share a piece of state with all other scenario's steps, your contexts need to implement the `Gorghoa\ScenarioStateBehatExtension\Context\ScenarioStateAwareContext` interface.
+To share a piece of state with all other scenario's steps, your contexts need to implement the
+`Gorghoa\ScenarioStateBehatExtension\Context\ScenarioStateAwareContext` interface.
 
-This interface declare one method to implement: `public function setScenarioState(ScenarioStateInterface $scenarioState)`. This ScenarioState is responsible for storing your state.
+This interface declare one method to implement: `public function setScenarioState(ScenarioStateInterface $scenarioState)`
+which can be imported using `ScenarioStateAwareTrait`. This ScenarioState is responsible for storing your state.
 
 ```php
 use Gorghoa\ScenarioStateBehatExtension\Context\ScenarioStateAwareContext;
@@ -65,7 +70,8 @@ class FeatureContext implements ScenarioStateAwareContext
 }
 ```
 
-Then you can publish state fragment through the `ScenarioStateInterface::provideStateFragment(string $key, mixed $value)` method.
+Then you can publish state fragment through the `ScenarioStateInterface::provideStateFragment(string $key, mixed $value)`
+method.
 
 ```php
 /**
@@ -76,37 +82,43 @@ public function takeBanana()
     $banana = 'Yammy Banana';
     $bonobo = new Bonobo('Gerard');
 
-    // Here, the banana `Yammy Banana` is shared amongst steps through the key “scenarioBanana”
+    // Here, the banana `Yammy Banana` is shared amongst steps through the key "scenarioBanana"
     $this->scenarioState->provideStateFragment('scenarioBanana', $banana);
 
-    // Here, the bonobo Gerard is shared amongst steps through the key “scenarioBonobo”
+    // Here, the bonobo Gerard is shared amongst steps through the key "scenarioBonobo"
     $this->scenarioState->provideStateFragment('scenarioBonobo', $bonobo);
 }
 ```
 
 ### Consuming state fragments
 
-The easiest way to consume state fragments provided to the scenario's state, is to add to step's methods the needed arguments whose names are matching keys of provided state fragments:
+To consume state fragments provided to the scenario's state, you must add needed arguments to step's methods using
+`ScenarioStateArgument` annotation. It can be used in many ways:
+
+- inject 1 argument from store with the exact same name: `@ScenarioStateArgument("scenarioBanana")` or `@ScenarioStateArgument(name="scenarioBanana")`
+- inject 1 argument from store changing its name: `@ScenarioStateArgument(name="scenarioBanana", argument="banana")`
+- inject multiple arguments from store: `@ScenarioStateArgument(mapping={"scenarioBanana", scenarioBonobo="bonobo"})`
 
 ```php
+use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
+
 /**
- * @Param string $monkey
- * @Param string $scenarioBanana
- * @Param Bonobo $scenarioBonobo
- *
  * @When bonobo gives this banana to :monkey
+ *
+ * @ScenarioStateArgument(mapping={"scenarioBanana", scenarioBonobo="bonobo"})
+ *
+ * @param string $monkey
+ * @param string $scenarioBanana
+ * @param Bonobo $bonobo
  */
-public function giveBananaToGorilla($monkey, $scenarioBanana, Bonobo $scenarioBonobo)
+public function giveBananaToGorilla($monkey, $scenarioBanana, Bonobo $bonobo)
 {
     // (note that PHPUnit is here only given as an example, feel free to use any asserter you want)
     \PHPUnit_Framework_Assert::assertEquals($monkey, 'gorilla');
     \PHPUnit_Framework_Assert::assertEquals($scenarioBanana, 'Yammy Banana');
-    \PHPUnit_Framework_Assert::assertEquals($scenarioBonobo->getName(), 'Gerard');
+    \PHPUnit_Framework_Assert::assertEquals($bonobo->getName(), 'Gerard');
 }
 ```
-
-> *Note*: The argument name of the function **must match** the key used when using `provideStateFragment`.
-> If no corresponding key in the scenario state is found, a `Behat\Testwork\Argument\Exception\UnknownParameterValueException` is thrown.
 
 ## Why injecting state's fragment through method params
 
