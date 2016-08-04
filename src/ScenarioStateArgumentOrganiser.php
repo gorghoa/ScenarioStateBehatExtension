@@ -18,7 +18,7 @@ use ReflectionFunctionAbstract;
 /**
  * @author Rodrigue Villetard <rodrigue.villetard@gmail.com>
  */
-class ScenarioStateArgumentOrganiser implements ArgumentOrganiser
+final class ScenarioStateArgumentOrganiser implements ArgumentOrganiser
 {
     private $baseOrganiser;
     private $store;
