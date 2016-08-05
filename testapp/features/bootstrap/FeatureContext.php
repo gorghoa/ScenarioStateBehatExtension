@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-require_once __DIR__.'/../../Gorilla.php';
+require_once __DIR__.'/../../autoload.php';
 
+use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
 use Gorghoa\ScenarioStateBehatExtension\Context\ScenarioStateAwareContext;
 use Gorghoa\ScenarioStateBehatExtension\ScenarioStateInterface;
 
@@ -40,6 +41,8 @@ class FeatureContext implements ScenarioStateAwareContext
     /**
      * @When gives this banana to gorilla
      *
+     * @ScenarioStateArgument("scenarioBanana")
+     *
      * @param string $scenarioBanana
      */
     public function giveBananaToGorilla($scenarioBanana)
@@ -53,12 +56,15 @@ class FeatureContext implements ScenarioStateAwareContext
     /**
      * @Then the gorilla has the banana
      *
+     * @ScenarioStateArgument("scenarioBanana")
+     * @ScenarioStateArgument(name="scenarioGorilla", argument="gorilla")
+     *
      * @param string  $scenarioBanana
-     * @param Gorilla $scenarioGorilla
+     * @param Gorilla $gorilla
      */
-    public function gorillaHasBanana($scenarioBanana, Gorilla $scenarioGorilla)
+    public function gorillaHasBanana($scenarioBanana, Gorilla $gorilla)
     {
         \PHPUnit_Framework_Assert::assertEquals($scenarioBanana, ['Yammy Banana']);
-        \PHPUnit_Framework_Assert::assertEquals($scenarioGorilla->getBanana(), ['Yammy Banana']);
+        \PHPUnit_Framework_Assert::assertEquals($gorilla->getBanana(), ['Yammy Banana']);
     }
 }

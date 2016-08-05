@@ -15,12 +15,13 @@
         "php": ">=5.5",
         "behat/behat": "^3.0.12",
         "symfony/dependency-injection": "^2.7|^3.0",
-        "symfony/process": "^2.0|^3.0"
+        "symfony/process": "^2.0|^3.0",
+        "doctrine/annotations": "^1.2"
     },
 
     "require-dev": {
         "phpspec/phpspec": "~2.0",
-        "phpunit/phpunit": "~4.0"
+        "phpunit/phpunit": "~4.5"
     },
 
     "autoload": {

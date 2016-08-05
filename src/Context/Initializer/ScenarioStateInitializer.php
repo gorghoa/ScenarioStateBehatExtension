@@ -22,7 +22,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * @author Rodrigue Villetard <rodrigue.villetard@gmail.com>
  */
-final class ScenarioStateInitializer implements ContextInitializer, EventSubscriberInterface
+class ScenarioStateInitializer implements ContextInitializer, EventSubscriberInterface
 {
     /**
      * @var ScenarioStateInterface

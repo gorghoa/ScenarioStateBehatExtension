@@ -10,4 +10,5 @@ composer install
 
 ```
 vendor/bin/behat
+vendor/bin/phpunit
 ```
