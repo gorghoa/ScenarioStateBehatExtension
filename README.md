@@ -58,7 +58,7 @@ initially took. This behat extension will help us to propagate the banana refenc
 To share a piece of state with all other scenario's steps, your contexts need to implement the
 `Gorghoa\ScenarioStateBehatExtension\Context\ScenarioStateAwareContext` interface.
 
-This interface declare one method to implement: `public function setScenarioState(ScenarioStateInterface $scenarioState)`
+This interface declares one method to implement: `public function setScenarioState(ScenarioStateInterface $scenarioState)`
 which can be imported using `ScenarioStateAwareTrait`. This ScenarioState is responsible for storing your state.
 
 ```php
@@ -122,8 +122,8 @@ public function giveBananaToGorilla($monkey, $scenarioBanana, Bonobo $bonobo)
 }
 ```
 
-## Why injecting state's fragment through method params
+## Why injecting state's fragments through method params
 
   1. Clear dependencies declaration for the step method
-  2. Runtime checks by php: fail quickly if the argument is not present
+  2. Runtime checks by php: fail quickly if the argument is not present or does not match type hint
   3. The less verbose way of consuming shared scenario state
