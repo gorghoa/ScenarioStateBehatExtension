@@ -29,5 +29,10 @@
             "Gorghoa\\ScenarioStateBehatExtension\\": "src/",
             "Symfony\\Component\\Process\\": "vendor/symfony/process/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gorghoa\\ScenarioStateBehatExtension\\TestApp\\": "testapp/"
+        }
     }
 }

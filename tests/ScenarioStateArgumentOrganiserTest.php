@@ -76,9 +76,9 @@ class ScenarioStateArgumentOrganiserTest extends \PHPUnit_Framework_TestCase
     public function testOrganiseArguments()
     {
         $this->functionMock->getParameters()->willReturn([
-            (object)['name' => 'scenarioBanana'],
-            (object)['name' => 'gorilla'],
-            (object)['name' => 'foo'],
+            (object) ['name' => 'scenarioBanana'],
+            (object) ['name' => 'gorilla'],
+            (object) ['name' => 'foo'],
         ])->shouldBeCalledTimes(1);
 
         $this->initializerMock->getStore()->willReturn($this->storeMock->reveal())->shouldBeCalledTimes(1);
