@@ -40,11 +40,15 @@ final class ScenarioStateArgumentOrganiser implements ArgumentOrganiser
     public function organiseArguments(ReflectionFunctionAbstract $function, array $match)
     {
         $i = array_slice(array_keys($match), -1, 1)[0];
-        $paramsKeys = array_map(function ($element) {
+        $paramsKeys = array_map(function($element) {
             return $element->name;
         }, $function->getParameters());
 
         $store = $this->store->getStore();
+
+        if (!($function instanceof \ReflectionMethod)) {
+            return $this->baseOrganiser->organiseArguments($function, $match);
+        }
 
         /** @var ScenarioStateArgument[] $annotations */
         $annotations = $this->reader->getMethodAnnotations($function);

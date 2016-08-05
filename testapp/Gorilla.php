@@ -1,5 +1,7 @@
 <?php
 
+namespace Gorghoa\ScenarioStateBehatExtension\TestApp;
+
 /*
  * This file is part of the ScenarioStateBehatExtension project.
  *
@@ -16,7 +18,10 @@ class Gorilla
 {
     private $banana;
 
-    public function setBanana(array $banana)
+    /**
+     * @param string $banana
+     */
+    public function setBanana($banana)
     {
         $this->banana = $banana;
     }
