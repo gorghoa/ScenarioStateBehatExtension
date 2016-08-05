@@ -1,6 +1,8 @@
 # ScenarioStateBehatExtension
 
 [![Build Status](https://travis-ci.org/gorghoa/ScenarioStateBehatExtension.svg?branch=master)](https://travis-ci.org/gorghoa/ScenarioStateBehatExtension)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/gorghoa/ScenarioStateBehatExtension/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/gorghoa/ScenarioStateBehatExtension/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/gorghoa/ScenarioStateBehatExtension/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/gorghoa/ScenarioStateBehatExtension/?branch=master)
 
 ## When to use
 
