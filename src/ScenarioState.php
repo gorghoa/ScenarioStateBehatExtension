@@ -10,6 +10,7 @@
  */
 
 namespace Gorghoa\ScenarioStateBehatExtension;
+
 use Gorghoa\ScenarioStateBehatExtension\ScenarioState\Exception\MissingStateException;
 
 /**
