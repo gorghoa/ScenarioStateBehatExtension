@@ -10,6 +10,7 @@
  */
 
 namespace Gorghoa\ScenarioStateBehatExtension;
+use Gorghoa\ScenarioStateBehatExtension\ScenarioState\Exception\MissingStateException;
 
 /**
  * @author Rodrigue Villetard <rodrigue.villetard@gmail.com>
@@ -26,7 +27,7 @@ class ScenarioState implements ScenarioStateInterface
      */
     public function hasStateFragment($key)
     {
-        return isset($this->store[$key]);
+        return array_key_exists($key, $this->store);
     }
 
     /**
@@ -34,6 +35,9 @@ class ScenarioState implements ScenarioStateInterface
      */
     public function getStateFragment($key)
     {
+        if (!$this->hasStateFragment($key)) {
+            throw new MissingStateException("Missing {$key} state fragment was requested from store.");
+        }
         return $this->store[$key];
     }
 
