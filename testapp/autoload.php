@@ -11,4 +11,4 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/Gorilla.php';
-\Doctrine\Common\Annotations\AnnotationRegistry::registerFile(__DIR__.'/../src/Annotation/ScenarioStateArgument.php');
+
