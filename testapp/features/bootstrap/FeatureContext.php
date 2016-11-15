@@ -32,6 +32,9 @@ class FeatureContext implements ScenarioStateAwareContext
      */
     private $scenarioState;
 
+    /**
+     * @param ScenarioStateInterface $scenarioState
+     */
     public function setScenarioState(ScenarioStateInterface $scenarioState)
     {
         $this->scenarioState = $scenarioState;

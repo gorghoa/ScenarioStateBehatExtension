@@ -18,6 +18,9 @@ use Gorghoa\ScenarioStateBehatExtension\ScenarioStateInterface;
  */
 trait ScenarioStateAwareTrait
 {
+    /**
+     * @var ScenarioStateInterface
+     */
     private $scenarioState;
 
     /**

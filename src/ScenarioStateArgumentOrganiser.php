@@ -23,8 +23,19 @@ use ReflectionFunctionAbstract;
  */
 final class ScenarioStateArgumentOrganiser implements ArgumentOrganiser
 {
+    /**
+     * @var ArgumentOrganiser
+     */
     private $baseOrganiser;
+
+    /**
+     * @var ScenarioStateInitializer
+     */
     private $store;
+
+    /**
+     * @var Reader
+     */
     private $reader;
 
     public function __construct(ArgumentOrganiser $organiser, ScenarioStateInitializer $store, Reader $reader)
