@@ -39,6 +39,7 @@ class ScenarioState implements ScenarioStateInterface
         if (!$this->hasStateFragment($key)) {
             throw new MissingStateException("Missing {$key} state fragment was requested from store.");
         }
+
         return $this->store[$key];
     }
 

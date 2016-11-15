@@ -12,8 +12,7 @@ namespace Gorghoa\ScenarioStateBehatExtension;
 use Gorghoa\ScenarioStateBehatExtension\ScenarioState\Exception\MissingStateException;
 
 /**
- * Class ScenarioStateTest
- * @package Gorghoa\ScenarioStateBehatExtension
+ * @author Walter Dolce <walterdolce@gmail.com>
  */
 class ScenarioStateTest extends \PHPUnit_Framework_TestCase
 {

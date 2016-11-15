@@ -10,9 +10,8 @@
 namespace Gorghoa\ScenarioStateBehatExtension\ScenarioState\Exception;
 
 /**
- * Class MissingStateException
- * @package Gorghoa\ScenarioStateBehatExtension\ScenarioState\Exception
+ * @author Walter Dolce <walterdolce@gmail.com>
  */
-class MissingStateException extends \Exception
+class MissingStateException extends \LogicException
 {
 }
