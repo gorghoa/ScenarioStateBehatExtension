@@ -17,6 +17,7 @@ use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Gorghoa\ScenarioStateBehatExtension\Context\Initializer\ScenarioStateInitializer;
 use Gorghoa\ScenarioStateBehatExtension\ScenarioStateArgumentOrganiser;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -47,6 +48,7 @@ class ScenarioStateExtension implements ExtensionInterface
      */
     public function initialize(ExtensionManager $extensionManager)
     {
+        AnnotationRegistry::registerFile(__DIR__.'/../Annotation/ScenarioStateArgument.php');
     }
 
     /**
