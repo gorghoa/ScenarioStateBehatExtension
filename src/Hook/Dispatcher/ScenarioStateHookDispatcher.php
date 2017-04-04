@@ -9,18 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Gorghoa\ScenarioStateBehatExtension;
+namespace Gorghoa\ScenarioStateBehatExtension\Hook\Dispatcher;
 
 use Behat\Testwork\Call\CallCenter;
-use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Hook\Call\HookCall;
-use Behat\Testwork\Hook\Hook;
 use Behat\Testwork\Hook\HookRepository;
 use Behat\Testwork\Hook\Scope\HookScope;
 use Doctrine\Common\Annotations\Reader;
 use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
 use Gorghoa\ScenarioStateBehatExtension\Context\Initializer\ScenarioStateInitializer;
+use Gorghoa\ScenarioStateBehatExtension\Hook\Call\ScenarioStateCall;
 
 /**
  * @author Vincent Chalamon <vincent@les-tilleuls.coop>
@@ -74,6 +73,7 @@ final class ScenarioStateHookDispatcher
     {
         $results = array();
         foreach ($this->repository->getScopeHooks($scope) as $hook) {
+            /** @var \ReflectionMethod $function */
             $function = $hook->getReflection();
 
             // No `@ScenarioStateArgument` annotation found
@@ -106,18 +106,5 @@ final class ScenarioStateHookDispatcher
         }
 
         return new CallResults($results);
-    }
-
-    /**
-     * Dispatches single event hook.
-     *
-     * @param HookScope $scope
-     * @param Hook      $hook
-     *
-     * @return CallResult
-     */
-    private function dispatchHook(HookScope $scope, Hook $hook)
-    {
-        return $this->callCenter->makeCall(new HookCall($scope, $hook));
     }
 }

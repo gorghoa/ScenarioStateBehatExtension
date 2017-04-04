@@ -12,6 +12,7 @@
 namespace Gorghoa\ScenarioStateBehatExtension\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
+use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
@@ -20,9 +21,10 @@ use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Gorghoa\ScenarioStateBehatExtension\Argument\ScenarioStateArgumentOrganiser;
 use Gorghoa\ScenarioStateBehatExtension\Context\Initializer\ScenarioStateInitializer;
-use Gorghoa\ScenarioStateBehatExtension\ScenarioStateArgumentOrganiser;
-use Gorghoa\ScenarioStateBehatExtension\ScenarioStateHookDispatcher;
+use Gorghoa\ScenarioStateBehatExtension\Hook\Dispatcher\ScenarioStateHookDispatcher;
+use Gorghoa\ScenarioStateBehatExtension\Hook\Tester\HookableScenarioTester;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -37,6 +39,8 @@ use Symfony\Component\DependencyInjection\Reference;
 class ScenarioStateExtension implements ExtensionInterface
 {
     const SCENARIO_STATE_ARGUMENT_ORGANISER_ID = 'argument.scenario_state_organiser';
+    const SCENARIO_STATE_DISPATCHER_ID = 'hook.scenario_state_dispatcher';
+    const SCENARIO_STATE_TESTER_ID = 'tester.scenario_state_scenario';
 
     /**
      * {@inheritdoc}
@@ -100,16 +104,6 @@ class ScenarioStateExtension implements ExtensionInterface
             ->setPublic(false)
             ->setArguments([
                 new Reference(sprintf('%s.inner', self::SCENARIO_STATE_ARGUMENT_ORGANISER_ID)),
-                new Reference('behatstore.context_initializer.store_aware'),
-                new Reference('doctrine.reader.annotation'),
-            ]);
-
-        // Override hook dispatcher
-        $container->register(HookExtension::DISPATCHER_ID, ScenarioStateHookDispatcher::class)
-            ->setPublic(false)
-            ->setArguments([
-                new Reference(HookExtension::REPOSITORY_ID),
-                new Reference(CallExtension::CALL_CENTER_ID),
                 new Reference('behatstore.context_initializer.store_aware'),
                 new Reference('doctrine.reader.annotation'),
             ]);

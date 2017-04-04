@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Gorghoa\ScenarioStateBehatExtension;
+namespace Gorghoa\ScenarioStateBehatExtension\Argument;
 
 use Behat\Testwork\Argument\ArgumentOrganiser;
 use Doctrine\Common\Annotations\Reader;

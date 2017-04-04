@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Gorghoa\ScenarioStateBehatExtension;
+namespace Gorghoa\ScenarioStateBehatExtension\Hook\Call;
 
 use Behat\Testwork\Environment\Call\EnvironmentCall;
 use Behat\Testwork\Hook\Hook;

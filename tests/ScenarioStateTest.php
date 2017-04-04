@@ -9,7 +9,7 @@
  */
 namespace Gorghoa\ScenarioStateBehatExtension;
 
-use Gorghoa\ScenarioStateBehatExtension\ScenarioState\Exception\MissingStateException;
+use Gorghoa\ScenarioStateBehatExtension\Exception\MissingStateException;
 
 /**
  * @author Walter Dolce <walterdolce@gmail.com>
