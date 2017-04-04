@@ -41,6 +41,26 @@ class FeatureContext implements ScenarioStateAwareContext
     }
 
     /**
+     * @BeforeScenario
+     */
+    public function initBananas()
+    {
+        $this->scenarioState->provideStateFragment('bananas', ['foo', 'bar']);
+    }
+
+    /**
+     * @BeforeScenario
+     *
+     * @ScenarioStateArgument("bananas")
+     *
+     * @param array $bananas
+     */
+    public function saveBananas(\Behat\Behat\Hook\Scope\BeforeScenarioScope $scope, array $bananas)
+    {
+        \PHPUnit_Framework_Assert::assertEquals(['foo', 'bar'], $bananas);
+    }
+
+    /**
      * @When the bonobo takes a banana
      */
     public function takeBanana()
@@ -57,7 +77,7 @@ class FeatureContext implements ScenarioStateAwareContext
      */
     public function giveBananaToGorilla($scenarioBanana)
     {
-        \PHPUnit_Framework_Assert::assertEquals($scenarioBanana, 'Yammy Banana');
+        \PHPUnit_Framework_Assert::assertEquals('Yammy Banana', $scenarioBanana);
         $gorilla = new Gorilla();
         $gorilla->setBanana($scenarioBanana);
         $this->scenarioState->provideStateFragment('scenarioGorilla', $gorilla);
@@ -74,7 +94,7 @@ class FeatureContext implements ScenarioStateAwareContext
      */
     public function gorillaHasBanana($scenarioBanana, Gorilla $gorilla)
     {
-        \PHPUnit_Framework_Assert::assertEquals($scenarioBanana, 'Yammy Banana');
-        \PHPUnit_Framework_Assert::assertEquals($gorilla->getBanana(), 'Yammy Banana');
+        \PHPUnit_Framework_Assert::assertEquals('Yammy Banana', $scenarioBanana);
+        \PHPUnit_Framework_Assert::assertEquals('Yammy Banana', $gorilla->getBanana());
     }
 }
