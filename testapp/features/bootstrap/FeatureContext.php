@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
 use Gorghoa\ScenarioStateBehatExtension\Context\ScenarioStateAwareContext;
 use Gorghoa\ScenarioStateBehatExtension\ScenarioStateInterface;
@@ -55,9 +56,33 @@ class FeatureContext implements ScenarioStateAwareContext
      *
      * @param array $bananas
      */
-    public function saveBananas(\Behat\Behat\Hook\Scope\BeforeScenarioScope $scope, array $bananas)
+    public function saveBananasWithoutScope(array $bananas)
     {
         \PHPUnit_Framework_Assert::assertEquals(['foo', 'bar'], $bananas);
+    }
+
+    /**
+     * @BeforeScenario
+     *
+     * @ScenarioStateArgument("bananas")
+     *
+     * @param BeforeScenarioScope $scope
+     * @param array               $bananas
+     */
+    public function saveBananasWithScope(BeforeScenarioScope $scope, array $bananas)
+    {
+        \PHPUnit_Framework_Assert::assertNotNull($scope);
+        \PHPUnit_Framework_Assert::assertEquals(['foo', 'bar'], $bananas);
+    }
+
+    /**
+     * @BeforeScenario
+     *
+     * @param BeforeScenarioScope $scope
+     */
+    public function initApples(BeforeScenarioScope $scope)
+    {
+        \PHPUnit_Framework_Assert::assertNotNull($scope);
     }
 
     /**

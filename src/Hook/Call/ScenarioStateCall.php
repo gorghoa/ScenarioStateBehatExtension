@@ -26,26 +26,19 @@ final class ScenarioStateCall extends EnvironmentCall
     private $scope;
 
     /**
-     * Initializes scenario state call.
-     *
-     * @param HookScope    $scope
-     * @param Hook         $hook
-     * @param null|integer $errorReportingLevel
+     * @param HookScope $scope
+     * @param Hook      $hook
+     * @param array     $arguments
+     * @param null      $errorReportingLevel
      */
     public function __construct(HookScope $scope, Hook $hook, $arguments, $errorReportingLevel = null)
     {
-        $environment;
-        $hook;
-        $arguments;
-        $errorReportingLevel;
         parent::__construct($scope->getEnvironment(), $hook, array($scope, $arguments), $errorReportingLevel);
 
         $this->scope = $scope;
     }
 
     /**
-     * Returns hook scope.
-     *
      * @return HookScope
      */
     public function getScope()

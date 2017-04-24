@@ -27,7 +27,6 @@ use Gorghoa\ScenarioStateBehatExtension\Hook\Dispatcher\ScenarioStateHookDispatc
 use Gorghoa\ScenarioStateBehatExtension\Hook\Tester\ScenarioStateHookableScenarioTester;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -38,9 +37,9 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class ScenarioStateExtension implements ExtensionInterface
 {
-    const SCENARIO_STATE_ARGUMENT_ORGANISER_ID = 'argument.scenario_state_organiser';
-    const SCENARIO_STATE_DISPATCHER_ID = 'hook.scenario_state_dispatcher';
-    const SCENARIO_STATE_TESTER_ID = 'tester.scenario_state_scenario';
+    const SCENARIO_STATE_ARGUMENT_ORGANISER_ID = 'argument.scenario_state.organiser';
+    const SCENARIO_STATE_DISPATCHER_ID = 'hook.scenario_state.dispatcher';
+    const SCENARIO_STATE_TESTER_ID = 'tester.scenario_state.wrapper';
 
     /**
      * {@inheritdoc}
@@ -83,11 +82,9 @@ class ScenarioStateExtension implements ExtensionInterface
 
     private function loadContextInitializer(ContainerBuilder $container)
     {
-        $definition = new Definition(ScenarioStateInitializer::class, []);
-        $definition->addTag(ContextExtension::INITIALIZER_TAG, ['priority' => 0]);
-        $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, ['priority' => 0]);
-
-        $container->setDefinition('behatstore.context_initializer.store_aware', $definition);
+        $container->register('behatstore.context_initializer.store_aware', ScenarioStateInitializer::class)
+            ->addTag(ContextExtension::INITIALIZER_TAG, ['priority' => 0])
+            ->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, ['priority' => 0]);
     }
 
     private function loadOrganiser(ContainerBuilder $container)
@@ -119,11 +116,9 @@ class ScenarioStateExtension implements ExtensionInterface
             ]);
         $container->register(self::SCENARIO_STATE_TESTER_ID, ScenarioStateHookableScenarioTester::class)
             ->setDecoratedService(TesterExtension::SCENARIO_TESTER_WRAPPER_TAG.'.hookable')
-            ->setPublic(false)
             ->setArguments([
-                new Reference(sprintf('%s.inner', self::SCENARIO_STATE_TESTER_ID)),
-                new Reference(TesterExtension::SCENARIO_TESTER_ID),
+                new Reference(self::SCENARIO_STATE_TESTER_ID.'.inner'),
                 new Reference(self::SCENARIO_STATE_DISPATCHER_ID),
-            ])/*->addTag(TesterExtension::SCENARIO_TESTER_WRAPPER_TAG, array('priority' => 99999))*/;
+            ]);
     }
 }

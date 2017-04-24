@@ -29,11 +29,6 @@ final class ScenarioStateHookableScenarioTester implements ScenarioTester
     /**
      * @var HookableScenarioTester
      */
-    private $decoratedService;
-
-    /**
-     * @var ScenarioTester
-     */
     private $baseTester;
 
     /**
@@ -42,13 +37,11 @@ final class ScenarioStateHookableScenarioTester implements ScenarioTester
     private $dispatcher;
 
     /**
-     * @param HookableScenarioTester      $decoratedService
-     * @param ScenarioTester              $baseTester
+     * @param HookableScenarioTester      $baseTester
      * @param ScenarioStateHookDispatcher $dispatcher
      */
-    public function __construct(HookableScenarioTester $decoratedService, ScenarioTester $baseTester, ScenarioStateHookDispatcher $dispatcher)
+    public function __construct(HookableScenarioTester $baseTester, ScenarioStateHookDispatcher $dispatcher)
     {
-        $this->decoratedService = $decoratedService;
         $this->baseTester = $baseTester;
         $this->dispatcher = $dispatcher;
     }
@@ -58,7 +51,7 @@ final class ScenarioStateHookableScenarioTester implements ScenarioTester
      */
     public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
-        $setup = $this->decoratedService->setUp($env, $feature, $scenario, true);
+        $setup = $this->baseTester->setUp($env, $feature, $scenario, true);
 
         if ($skip) {
             return $setup;
@@ -75,7 +68,7 @@ final class ScenarioStateHookableScenarioTester implements ScenarioTester
      */
     public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
-        return $this->decoratedService->test($env, $feature, $scenario, $skip);
+        return $this->baseTester->test($env, $feature, $scenario, $skip);
     }
 
     /**
@@ -83,6 +76,6 @@ final class ScenarioStateHookableScenarioTester implements ScenarioTester
      */
     public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
     {
-        return $this->decoratedService->tearDown($env, $feature, $scenario, $skip, $result);
+        return $this->baseTester->tearDown($env, $feature, $scenario, $skip, $result);
     }
 }
