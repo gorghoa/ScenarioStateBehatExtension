@@ -87,7 +87,7 @@ final class ScenarioStateHookDispatcher
             $paramsKeys = array_map(function($element) {
                 return $element->name;
             }, $function->getParameters());
-            var_dump($function->getParameters());
+            var_dump($function->getParameters());die;
             $store = $this->store->getStore();
 
             /** @var ScenarioStateArgument[] $annotations */

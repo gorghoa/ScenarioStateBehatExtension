@@ -12,7 +12,7 @@
 namespace Gorghoa\ScenarioStateBehatExtension\Hook\Tester;
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Behat\Behat\Hook\Tester\HookableScenarioTester as BaseHookableScenarioTester;
+use Behat\Behat\Hook\Tester\HookableScenarioTester;
 use Behat\Behat\Tester\ScenarioTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface as Scenario;
@@ -24,17 +24,12 @@ use Gorghoa\ScenarioStateBehatExtension\Hook\Dispatcher\ScenarioStateHookDispatc
 /**
  * @author Vincent Chalamon <vincent@les-tilleuls.coop>
  */
-final class HookableScenarioTester implements ScenarioTester
+final class ScenarioStateHookableScenarioTester implements ScenarioTester
 {
     /**
-     * @var BaseHookableScenarioTester
+     * @var HookableScenarioTester
      */
     private $decoratedService;
-
-    /**
-     * @var ScenarioStateHookDispatcher
-     */
-    private $dispatcher;
 
     /**
      * @var ScenarioTester
@@ -42,11 +37,28 @@ final class HookableScenarioTester implements ScenarioTester
     private $baseTester;
 
     /**
+     * @var ScenarioStateHookDispatcher
+     */
+    private $dispatcher;
+
+    /**
+     * @param HookableScenarioTester      $decoratedService
+     * @param ScenarioTester              $baseTester
+     * @param ScenarioStateHookDispatcher $dispatcher
+     */
+    public function __construct(HookableScenarioTester $decoratedService, ScenarioTester $baseTester, ScenarioStateHookDispatcher $dispatcher)
+    {
+        $this->decoratedService = $decoratedService;
+        $this->baseTester = $baseTester;
+        $this->dispatcher = $dispatcher;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
-        $setup = $this->baseTester->setUp($env, $feature, $scenario, $skip);
+        $setup = $this->decoratedService->setUp($env, $feature, $scenario, true);
 
         if ($skip) {
             return $setup;
@@ -71,6 +83,6 @@ final class HookableScenarioTester implements ScenarioTester
      */
     public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
     {
-        return $this->tearDown($env, $feature, $scenario, $skip, $result);
+        return $this->decoratedService->tearDown($env, $feature, $scenario, $skip, $result);
     }
 }

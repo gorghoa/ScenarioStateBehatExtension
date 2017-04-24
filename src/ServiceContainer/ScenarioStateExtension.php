@@ -24,7 +24,7 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Gorghoa\ScenarioStateBehatExtension\Argument\ScenarioStateArgumentOrganiser;
 use Gorghoa\ScenarioStateBehatExtension\Context\Initializer\ScenarioStateInitializer;
 use Gorghoa\ScenarioStateBehatExtension\Hook\Dispatcher\ScenarioStateHookDispatcher;
-use Gorghoa\ScenarioStateBehatExtension\Hook\Tester\HookableScenarioTester;
+use Gorghoa\ScenarioStateBehatExtension\Hook\Tester\ScenarioStateHookableScenarioTester;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -107,5 +107,23 @@ class ScenarioStateExtension implements ExtensionInterface
                 new Reference('behatstore.context_initializer.store_aware'),
                 new Reference('doctrine.reader.annotation'),
             ]);
+
+        // Override hook process
+        $container->register(self::SCENARIO_STATE_DISPATCHER_ID, ScenarioStateHookDispatcher::class)
+            ->setPublic(false)
+            ->setArguments([
+                new Reference(HookExtension::REPOSITORY_ID),
+                new Reference(CallExtension::CALL_CENTER_ID),
+                new Reference('behatstore.context_initializer.store_aware'),
+                new Reference('doctrine.reader.annotation'),
+            ]);
+        $container->register(self::SCENARIO_STATE_TESTER_ID, ScenarioStateHookableScenarioTester::class)
+            ->setDecoratedService(TesterExtension::SCENARIO_TESTER_WRAPPER_TAG.'.hookable')
+            ->setPublic(false)
+            ->setArguments([
+                new Reference(sprintf('%s.inner', self::SCENARIO_STATE_TESTER_ID)),
+                new Reference(TesterExtension::SCENARIO_TESTER_ID),
+                new Reference(self::SCENARIO_STATE_DISPATCHER_ID),
+            ])/*->addTag(TesterExtension::SCENARIO_TESTER_WRAPPER_TAG, array('priority' => 99999))*/;
     }
 }

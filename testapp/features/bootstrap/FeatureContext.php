@@ -41,6 +41,26 @@ class FeatureContext implements ScenarioStateAwareContext
     }
 
     /**
+     * @BeforeScenario
+     */
+    public function initBananas()
+    {
+        $this->scenarioState->provideStateFragment('bananas', ['foo', 'bar']);
+    }
+
+    /**
+     * @BeforeScenario
+     *
+     * @ScenarioStateArgument("bananas")
+     *
+     * @param array $bananas
+     */
+    public function saveBananas(\Behat\Behat\Hook\Scope\BeforeScenarioScope $scope, array $bananas)
+    {
+        \PHPUnit_Framework_Assert::assertEquals(['foo', 'bar'], $bananas);
+    }
+
+    /**
      * @When the bonobo takes a banana
      */
     public function takeBanana()
