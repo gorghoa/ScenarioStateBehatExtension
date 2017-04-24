@@ -11,6 +11,7 @@
 
 namespace Gorghoa\ScenarioStateBehatExtension\Hook\Tester;
 
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Behat\Hook\Tester\HookableScenarioTester;
 use Behat\Behat\Tester\ScenarioTester;
@@ -18,6 +19,7 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface as Scenario;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
+use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Tester\Result\TestResult;
 use Gorghoa\ScenarioStateBehatExtension\Hook\Dispatcher\ScenarioStateHookDispatcher;
 
@@ -57,8 +59,7 @@ final class ScenarioStateHookableScenarioTester implements ScenarioTester
             return $setup;
         }
 
-        $scope = new BeforeScenarioScope($env, $feature, $scenario);
-        $hookCallResults = $this->dispatcher->dispatchScopeHooks($scope);
+        $hookCallResults = $this->dispatcher->dispatchScopeHooks(new BeforeScenarioScope($env, $feature, $scenario));
 
         return new HookedSetup($setup, $hookCallResults);
     }
@@ -76,6 +77,14 @@ final class ScenarioStateHookableScenarioTester implements ScenarioTester
      */
     public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
     {
-        return $this->baseTester->tearDown($env, $feature, $scenario, $skip, $result);
+        $teardown = $this->baseTester->tearDown($env, $feature, $scenario, $skip, $result);
+
+        if ($skip) {
+            return $teardown;
+        }
+
+        $hookCallResults = $this->dispatcher->dispatchScopeHooks(new AfterScenarioScope($env, $feature, $scenario, $result));
+
+        return new HookedTeardown($teardown, $hookCallResults);
     }
 }

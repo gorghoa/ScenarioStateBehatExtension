@@ -94,7 +94,9 @@ class ScenarioStateExtension implements ExtensionInterface
             // Ignore Behat annotations in reader
             ->addMethodCall('addGlobalIgnoredName', ['Given'])
             ->addMethodCall('addGlobalIgnoredName', ['When'])
-            ->addMethodCall('addGlobalIgnoredName', ['Then']);
+            ->addMethodCall('addGlobalIgnoredName', ['Then'])
+            ->addMethodCall('addGlobalIgnoredName', ['BeforeScenario'])
+            ->addMethodCall('addGlobalIgnoredName', ['AfterScenario']);
 
         $container->register(self::SCENARIO_STATE_ARGUMENT_ORGANISER_ID, ScenarioStateArgumentOrganiser::class)
             ->setDecoratedService(ArgumentExtension::PREG_MATCH_ARGUMENT_ORGANISER_ID)

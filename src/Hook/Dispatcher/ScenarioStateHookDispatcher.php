@@ -11,15 +11,16 @@
 
 namespace Gorghoa\ScenarioStateBehatExtension\Hook\Dispatcher;
 
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\CallResults;
+use Behat\Testwork\Environment\Call\EnvironmentCall;
 use Behat\Testwork\Hook\Call\HookCall;
 use Behat\Testwork\Hook\HookRepository;
 use Behat\Testwork\Hook\Scope\HookScope;
 use Doctrine\Common\Annotations\Reader;
 use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
 use Gorghoa\ScenarioStateBehatExtension\Context\Initializer\ScenarioStateInitializer;
-use Gorghoa\ScenarioStateBehatExtension\Hook\Call\ScenarioStateCall;
 
 /**
  * @author Vincent Chalamon <vincent@les-tilleuls.coop>
@@ -82,14 +83,13 @@ final class ScenarioStateHookDispatcher
                 continue;
             }
 
-//            $match = [];
-//            $i = array_slice(array_keys($match), -1, 1)[0];
             $paramsKeys = array_map(function($element) {
                 return $element->name;
             }, $function->getParameters());
-            var_dump($function->getParameters());die;
             $store = $this->store->getStore();
+            $params = $arguments = [];
 
+            // Prepare arguments from annotations
             /** @var ScenarioStateArgument[] $annotations */
             $annotations = $this->reader->getMethodAnnotations($function);
             foreach ($annotations as $annotation) {
@@ -97,12 +97,20 @@ final class ScenarioStateHookDispatcher
                     in_array($annotation->getArgument(), $paramsKeys) &&
                     $store->hasStateFragment($annotation->getName())
                 ) {
-                    $match[$annotation->getArgument()] = $store->getStateFragment($annotation->getName());
-                    $match[strval(++$i)] = $store->getStateFragment($annotation->getName());
+                    $params[$annotation->getArgument()] = $store->getStateFragment($annotation->getName());
                 }
             }
 
-            $results[] = $this->callCenter->makeCall(new ScenarioStateCall($scope, $hook, ['foo', 'bar']));
+            // Manage `scope` argument
+            foreach ($function->getParameters() as $parameter) {
+                if (null !== $parameter->getClass() && get_class($scope) === $parameter->getClass()->getName()) {
+                    $arguments[$parameter->getName()] = $scope;
+                } elseif (isset($params[$parameter->getName()])) {
+                    $arguments[$parameter->getName()] = $params[$parameter->getName()];
+                }
+            }
+
+            $results[] = $this->callCenter->makeCall(new EnvironmentCall($scope->getEnvironment(), $hook, $arguments));
         }
 
         return new CallResults($results);

@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
 use Gorghoa\ScenarioStateBehatExtension\Context\ScenarioStateAwareContext;
@@ -56,7 +57,7 @@ class FeatureContext implements ScenarioStateAwareContext
      *
      * @param array $bananas
      */
-    public function saveBananasWithoutScope(array $bananas)
+    public function saveBananasWithoutScopeBeforeScenario(array $bananas)
     {
         \PHPUnit_Framework_Assert::assertEquals(['foo', 'bar'], $bananas);
     }
@@ -69,7 +70,7 @@ class FeatureContext implements ScenarioStateAwareContext
      * @param BeforeScenarioScope $scope
      * @param array               $bananas
      */
-    public function saveBananasWithScope(BeforeScenarioScope $scope, array $bananas)
+    public function saveBananasWithScopeBeforeScenario(BeforeScenarioScope $scope, array $bananas)
     {
         \PHPUnit_Framework_Assert::assertNotNull($scope);
         \PHPUnit_Framework_Assert::assertEquals(['foo', 'bar'], $bananas);
@@ -80,7 +81,43 @@ class FeatureContext implements ScenarioStateAwareContext
      *
      * @param BeforeScenarioScope $scope
      */
-    public function initApples(BeforeScenarioScope $scope)
+    public function initApplesBeforeScenario(BeforeScenarioScope $scope)
+    {
+        \PHPUnit_Framework_Assert::assertNotNull($scope);
+    }
+
+    /**
+     * @AfterScenario
+     *
+     * @ScenarioStateArgument("bananas")
+     *
+     * @param array $bananas
+     */
+    public function saveBananasWithoutScopeAfterScenario(array $bananas)
+    {
+        \PHPUnit_Framework_Assert::assertEquals(['foo', 'bar'], $bananas);
+    }
+
+    /**
+     * @AfterScenario
+     *
+     * @ScenarioStateArgument("bananas")
+     *
+     * @param AfterScenarioScope $scope
+     * @param array              $bananas
+     */
+    public function saveBananasWithScopeAfterScenario(array $bananas, AfterScenarioScope $scope)
+    {
+        \PHPUnit_Framework_Assert::assertNotNull($scope);
+        \PHPUnit_Framework_Assert::assertEquals(['foo', 'bar'], $bananas);
+    }
+
+    /**
+     * @AfterScenario
+     *
+     * @param AfterScenarioScope $scope
+     */
+    public function initApplesAfterScenario(AfterScenarioScope $scope)
     {
         \PHPUnit_Framework_Assert::assertNotNull($scope);
     }
