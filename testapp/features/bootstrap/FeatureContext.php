@@ -103,8 +103,8 @@ class FeatureContext implements ScenarioStateAwareContext
      *
      * @ScenarioStateArgument("bananas")
      *
-     * @param AfterScenarioScope $scope
      * @param array              $bananas
+     * @param AfterScenarioScope $scope
      */
     public function saveBananasWithScopeAfterScenario(array $bananas, AfterScenarioScope $scope)
     {

@@ -77,7 +77,7 @@ final class ScenarioStateHookableScenarioTester implements ScenarioTester
      */
     public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
     {
-        $teardown = $this->baseTester->tearDown($env, $feature, $scenario, $skip, $result);
+        $teardown = $this->baseTester->tearDown($env, $feature, $scenario, true, $result);
 
         if ($skip) {
             return $teardown;
