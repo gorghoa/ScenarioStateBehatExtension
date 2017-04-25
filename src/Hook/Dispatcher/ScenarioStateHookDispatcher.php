@@ -82,7 +82,7 @@ class ScenarioStateHookDispatcher
                 continue;
             }
 
-            $paramsKeys = array_map(function($element) {
+            $paramsKeys = array_map(function ($element) {
                 return $element->name;
             }, $function->getParameters());
             $store = $this->store->getStore();
