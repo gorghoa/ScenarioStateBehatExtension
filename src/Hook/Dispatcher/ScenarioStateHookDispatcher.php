@@ -11,7 +11,6 @@
 
 namespace Gorghoa\ScenarioStateBehatExtension\Hook\Dispatcher;
 
-use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Call\EnvironmentCall;
@@ -25,7 +24,7 @@ use Gorghoa\ScenarioStateBehatExtension\Context\Initializer\ScenarioStateInitial
 /**
  * @author Vincent Chalamon <vincent@les-tilleuls.coop>
  */
-final class ScenarioStateHookDispatcher
+class ScenarioStateHookDispatcher
 {
     /**
      * @var HookRepository

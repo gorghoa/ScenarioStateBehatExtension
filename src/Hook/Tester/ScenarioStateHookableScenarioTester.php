@@ -13,7 +13,6 @@ namespace Gorghoa\ScenarioStateBehatExtension\Hook\Tester;
 
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Behat\Behat\Hook\Tester\HookableScenarioTester;
 use Behat\Behat\Tester\ScenarioTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface as Scenario;
@@ -29,7 +28,7 @@ use Gorghoa\ScenarioStateBehatExtension\Hook\Dispatcher\ScenarioStateHookDispatc
 final class ScenarioStateHookableScenarioTester implements ScenarioTester
 {
     /**
-     * @var HookableScenarioTester
+     * @var ScenarioTester
      */
     private $baseTester;
 
@@ -39,10 +38,10 @@ final class ScenarioStateHookableScenarioTester implements ScenarioTester
     private $dispatcher;
 
     /**
-     * @param HookableScenarioTester      $baseTester
+     * @param ScenarioTester      $baseTester
      * @param ScenarioStateHookDispatcher $dispatcher
      */
-    public function __construct(HookableScenarioTester $baseTester, ScenarioStateHookDispatcher $dispatcher)
+    public function __construct(ScenarioTester $baseTester, ScenarioStateHookDispatcher $dispatcher)
     {
         $this->baseTester = $baseTester;
         $this->dispatcher = $dispatcher;
