@@ -71,7 +71,7 @@ class ScenarioStateHookDispatcher
      */
     public function dispatchScopeHooks(HookScope $scope)
     {
-        $results = array();
+        $results = [];
         foreach ($this->repository->getScopeHooks($scope) as $hook) {
             /** @var \ReflectionMethod $function */
             $function = $hook->getReflection();

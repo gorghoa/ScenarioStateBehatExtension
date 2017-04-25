@@ -58,9 +58,7 @@ final class ScenarioStateHookableScenarioTester implements ScenarioTester
             return $setup;
         }
 
-        $hookCallResults = $this->dispatcher->dispatchScopeHooks(new BeforeScenarioScope($env, $feature, $scenario));
-
-        return new HookedSetup($setup, $hookCallResults);
+        return new HookedSetup($setup, $this->dispatcher->dispatchScopeHooks(new BeforeScenarioScope($env, $feature, $scenario)));
     }
 
     /**
@@ -82,8 +80,6 @@ final class ScenarioStateHookableScenarioTester implements ScenarioTester
             return $teardown;
         }
 
-        $hookCallResults = $this->dispatcher->dispatchScopeHooks(new AfterScenarioScope($env, $feature, $scenario, $result));
-
-        return new HookedTeardown($teardown, $hookCallResults);
+        return new HookedTeardown($teardown, $this->dispatcher->dispatchScopeHooks(new AfterScenarioScope($env, $feature, $scenario, $result)));
     }
 }
