@@ -122,6 +122,47 @@ public function giveBananaToGorilla($monkey, $scenarioBanana, Bonobo $bonobo)
 }
 ```
 
+### Using state fragments in Behat hook methods
+
+It's also possible to consume state fragments in hook methods: `BeforeScenario` & `AfterScenario`. And much better,
+the order is not important, you can set your arguments in any order you want:
+
+```php
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
+
+/**
+ * @BeforeScenario
+ *
+ * @ScenarioStateArgument("scenarioBanana")
+ *
+ * @param string              $scenarioBanana
+ * @param BeforeScenarioScope $scope
+ */
+public function checkBananaBeforeScenario($scenarioBanana, BeforeScenarioScope $scope)
+{
+    // (note that PHPUnit is here only given as an example, feel free to use any asserter you want)
+    \PHPUnit_Framework_Assert::assertEquals($scenarioBanana, 'Yammy Banana');
+    \PHPUnit_Framework_Assert::assertNotNull($scope);
+}
+
+/**
+ * @AfterScenario
+ *
+ * @ScenarioStateArgument("scenarioBanana")
+ *
+ * @param string             $scenarioBanana
+ * @param AfterScenarioScope $scope
+ */
+public function checkBananaAfterScenario($scenarioBanana, AfterScenarioScope $scope)
+{
+    // (note that PHPUnit is here only given as an example, feel free to use any asserter you want)
+    \PHPUnit_Framework_Assert::assertEquals($scenarioBanana, 'Yammy Banana');
+    \PHPUnit_Framework_Assert::assertNotNull($scope);
+}
+```
+
 ## Why injecting state's fragments through method params
 
   1. Clear dependencies declaration for the step method

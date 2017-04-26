@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
 use Gorghoa\ScenarioStateBehatExtension\Context\ScenarioStateAwareContext;
 use Gorghoa\ScenarioStateBehatExtension\ScenarioStateInterface;
@@ -41,6 +43,86 @@ class FeatureContext implements ScenarioStateAwareContext
     }
 
     /**
+     * @BeforeScenario
+     */
+    public function initBananas()
+    {
+        $this->scenarioState->provideStateFragment('bananas', ['foo', 'bar']);
+    }
+
+    /**
+     * @BeforeScenario
+     *
+     * @ScenarioStateArgument("bananas")
+     *
+     * @param array $bananas
+     */
+    public function saveBananasWithoutScopeBeforeScenario(array $bananas)
+    {
+        \PHPUnit_Framework_Assert::assertEquals(['foo', 'bar'], $bananas);
+    }
+
+    /**
+     * @BeforeScenario
+     *
+     * @ScenarioStateArgument("bananas")
+     *
+     * @param BeforeScenarioScope $scope
+     * @param array               $bananas
+     */
+    public function saveBananasWithScopeBeforeScenario(BeforeScenarioScope $scope, array $bananas)
+    {
+        \PHPUnit_Framework_Assert::assertNotNull($scope);
+        \PHPUnit_Framework_Assert::assertEquals(['foo', 'bar'], $bananas);
+    }
+
+    /**
+     * @BeforeScenario
+     *
+     * @param BeforeScenarioScope $scope
+     */
+    public function initApplesBeforeScenario(BeforeScenarioScope $scope)
+    {
+        \PHPUnit_Framework_Assert::assertNotNull($scope);
+    }
+
+    /**
+     * @AfterScenario
+     *
+     * @ScenarioStateArgument("bananas")
+     *
+     * @param array $bananas
+     */
+    public function saveBananasWithoutScopeAfterScenario(array $bananas)
+    {
+        \PHPUnit_Framework_Assert::assertEquals(['foo', 'bar'], $bananas);
+    }
+
+    /**
+     * @AfterScenario
+     *
+     * @ScenarioStateArgument("bananas")
+     *
+     * @param array              $bananas
+     * @param AfterScenarioScope $scope
+     */
+    public function saveBananasWithScopeAfterScenario(array $bananas, AfterScenarioScope $scope)
+    {
+        \PHPUnit_Framework_Assert::assertNotNull($scope);
+        \PHPUnit_Framework_Assert::assertEquals(['foo', 'bar'], $bananas);
+    }
+
+    /**
+     * @AfterScenario
+     *
+     * @param AfterScenarioScope $scope
+     */
+    public function initApplesAfterScenario(AfterScenarioScope $scope)
+    {
+        \PHPUnit_Framework_Assert::assertNotNull($scope);
+    }
+
+    /**
      * @When the bonobo takes a banana
      */
     public function takeBanana()
@@ -57,7 +139,7 @@ class FeatureContext implements ScenarioStateAwareContext
      */
     public function giveBananaToGorilla($scenarioBanana)
     {
-        \PHPUnit_Framework_Assert::assertEquals($scenarioBanana, 'Yammy Banana');
+        \PHPUnit_Framework_Assert::assertEquals('Yammy Banana', $scenarioBanana);
         $gorilla = new Gorilla();
         $gorilla->setBanana($scenarioBanana);
         $this->scenarioState->provideStateFragment('scenarioGorilla', $gorilla);
@@ -74,7 +156,7 @@ class FeatureContext implements ScenarioStateAwareContext
      */
     public function gorillaHasBanana($scenarioBanana, Gorilla $gorilla)
     {
-        \PHPUnit_Framework_Assert::assertEquals($scenarioBanana, 'Yammy Banana');
-        \PHPUnit_Framework_Assert::assertEquals($gorilla->getBanana(), 'Yammy Banana');
+        \PHPUnit_Framework_Assert::assertEquals('Yammy Banana', $scenarioBanana);
+        \PHPUnit_Framework_Assert::assertEquals('Yammy Banana', $gorilla->getBanana());
     }
 }

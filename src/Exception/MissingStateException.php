@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the ScenarioStateBehatExtension project.
  *
@@ -7,7 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Gorghoa\ScenarioStateBehatExtension\ScenarioState\Exception;
+
+namespace Gorghoa\ScenarioStateBehatExtension\Exception;
 
 /**
  * @author Walter Dolce <walterdolce@gmail.com>

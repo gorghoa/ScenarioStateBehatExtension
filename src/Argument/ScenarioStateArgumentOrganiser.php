@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Gorghoa\ScenarioStateBehatExtension;
+namespace Gorghoa\ScenarioStateBehatExtension\Argument;
 
 use Behat\Testwork\Argument\ArgumentOrganiser;
 use Doctrine\Common\Annotations\Reader;
@@ -51,7 +51,7 @@ final class ScenarioStateArgumentOrganiser implements ArgumentOrganiser
     public function organiseArguments(ReflectionFunctionAbstract $function, array $match)
     {
         $i = array_slice(array_keys($match), -1, 1)[0];
-        $paramsKeys = array_map(function($element) {
+        $paramsKeys = array_map(function ($element) {
             return $element->name;
         }, $function->getParameters());
 
