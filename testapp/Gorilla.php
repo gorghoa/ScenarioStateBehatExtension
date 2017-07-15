@@ -17,6 +17,8 @@ namespace Gorghoa\ScenarioStateBehatExtension\TestApp;
 class Gorilla
 {
     private $banana;
+    private $name;
+    private $male = false;
 
     /**
      * @param string $banana
@@ -26,8 +28,43 @@ class Gorilla
         $this->banana = $banana;
     }
 
+    /**
+     * @return string
+     */
     public function getBanana()
     {
         return $this->banana;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param bool $male
+     */
+    public function setMale($male)
+    {
+        $this->male = $male;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMale()
+    {
+        return $this->male;
     }
 }

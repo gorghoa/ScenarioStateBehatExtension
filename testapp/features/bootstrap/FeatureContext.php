@@ -48,6 +48,7 @@ class FeatureContext implements ScenarioStateAwareContext
     public function initBananas()
     {
         $this->scenarioState->provideStateFragment('bananas', ['foo', 'bar']);
+        $this->scenarioState->provideStateFragment('gorillaIsMale', true);
     }
 
     /**
@@ -131,16 +132,35 @@ class FeatureContext implements ScenarioStateAwareContext
     }
 
     /**
-     * @When gives this banana to gorilla
+     * @Transform :gorilla
+     *
+     * @ScenarioStateArgument(name="isMale", argument="gorillaIsMale")
+     *
+     * @param string $gorilla
+     * @param bool   $isMale
+     *
+     * @return Gorilla
+     */
+    public function transformGorilla($gorilla, $isMale)
+    {
+        $monkey = new Gorilla();
+        $monkey->setName($gorilla);
+        $monkey->setMale($isMale);
+
+        return $monkey;
+    }
+
+    /**
+     * @When gives this banana to :gorilla
      *
      * @ScenarioStateArgument("scenarioBanana")
      *
-     * @param string $scenarioBanana
+     * @param string  $scenarioBanana
+     * @param Gorilla $gorilla
      */
-    public function giveBananaToGorilla($scenarioBanana)
+    public function giveBananaToGorilla($scenarioBanana, Gorilla $gorilla)
     {
         \PHPUnit_Framework_Assert::assertEquals('Yammy Banana', $scenarioBanana);
-        $gorilla = new Gorilla();
         $gorilla->setBanana($scenarioBanana);
         $this->scenarioState->provideStateFragment('scenarioGorilla', $gorilla);
     }

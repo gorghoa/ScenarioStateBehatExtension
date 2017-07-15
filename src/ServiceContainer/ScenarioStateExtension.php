@@ -95,6 +95,7 @@ class ScenarioStateExtension implements ExtensionInterface
             ->addMethodCall('addGlobalIgnoredName', ['Given'])
             ->addMethodCall('addGlobalIgnoredName', ['When'])
             ->addMethodCall('addGlobalIgnoredName', ['Then'])
+            ->addMethodCall('addGlobalIgnoredName', ['Transform'])
             ->addMethodCall('addGlobalIgnoredName', ['BeforeScenario'])
             ->addMethodCall('addGlobalIgnoredName', ['AfterScenario']);
 
