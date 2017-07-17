@@ -55,14 +55,13 @@ final class ScenarioStateArgumentOrganiser implements ArgumentOrganiser
             return $element->name;
         }, $function->getParameters());
 
-        $store = $this->store->getStore();
-
-        if (!($function instanceof \ReflectionMethod)) {
+        if (!$function instanceof \ReflectionMethod) {
             return $this->baseOrganiser->organiseArguments($function, $match);
         }
 
         /** @var ScenarioStateArgument[] $annotations */
         $annotations = $this->reader->getMethodAnnotations($function);
+        $store = $this->store->getStore();
         foreach ($annotations as $annotation) {
             if ($annotation instanceof ScenarioStateArgument &&
                 in_array($annotation->getArgument(), $paramsKeys) &&

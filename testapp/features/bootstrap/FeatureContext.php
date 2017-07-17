@@ -22,7 +22,7 @@ use Gorghoa\ScenarioStateBehatExtension\TestApp\Gorilla;
 class FeatureContext implements ScenarioStateAwareContext
 {
     /**
-     * @beforeSuite
+     * @BeforeSuite
      */
     public static function setUpSuite()
     {
@@ -134,7 +134,7 @@ class FeatureContext implements ScenarioStateAwareContext
     /**
      * @Transform :gorilla
      *
-     * @ScenarioStateArgument(name="isMale", argument="gorillaIsMale")
+     * @ScenarioStateArgument(name="gorillaIsMale", argument="isMale")
      *
      * @param string $gorilla
      * @param bool   $isMale
