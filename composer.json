@@ -1,7 +1,7 @@
 {
     "name": "gorghoa/scenariostate-behat-extension",
     "type": "behat-extension",
-    "version": "v1.0.3",
+    "version": "v1.0.4",
     "description": "Scenario shared state extension for Behat",
     "keywords": ["behat", "bdd", "stateless api testing"],
     "license": "MIT",
