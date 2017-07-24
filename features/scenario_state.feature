@@ -14,3 +14,10 @@ Feature: Scenario shared state
     """
     [Behat\Testwork\Argument\Exception\UnknownParameterValueException]
     """
+
+  Scenario: Scenario Outline should work properly
+    When I run "behat --no-colors features/bandar-log.feature"
+    Then it should pass with:
+    """
+    2 scenarios (2 passed)
+    """

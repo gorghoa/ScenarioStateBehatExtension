@@ -73,7 +73,8 @@ class ArgumentsResolver
         // Reorder arguments
         $params = [];
         foreach ($function->getParameters() as $parameter) {
-            $params[$parameter->getName()] = $arguments[$parameter->getName()];
+            $name = $parameter->getName();
+            $params[$name] = isset($arguments[$name]) ? $arguments[$name] : $arguments[$parameter->getPosition()];
         }
 
         return $params;

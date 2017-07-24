@@ -31,7 +31,7 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $annotationMock = $this->prophesize(ScenarioStateArgument::class);
 
         $functionMock->getParameters()->willReturn([$parameterMock, $parameterMock])->shouldBeCalledTimes(2);
-        $parameterMock->getName()->willReturn('lorem', 'foo', 'lorem', 'lorem', 'foo', 'foo')->shouldBeCalledTimes(6);
+        $parameterMock->getName()->willReturn('lorem', 'foo', 'lorem', 'foo')->shouldBeCalledTimes(4);
         $initializerMock->getStore()->willReturn($storeMock)->shouldBeCalledTimes(1);
         $readerMock->getMethodAnnotation($functionMock, ScenarioStateArgument::class)->willReturn($annotationMock)->shouldBeCalledTimes(1);
         $readerMock->getMethodAnnotations($functionMock)->willReturn([$this->prophesize(\stdClass::class), $annotationMock])->shouldBeCalledTimes(1);

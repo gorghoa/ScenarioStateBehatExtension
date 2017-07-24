@@ -179,4 +179,17 @@ class FeatureContext implements ScenarioStateAwareContext
         \PHPUnit_Framework_Assert::assertEquals('Yammy Banana', $scenarioBanana);
         \PHPUnit_Framework_Assert::assertEquals('Yammy Banana', $gorilla->getBanana());
     }
+
+    /**
+     * @Then the gorilla is named :name
+     *
+     * @ScenarioStateArgument(name="scenarioGorilla", argument="gorilla")
+     *
+     * @param string  $name
+     * @param Gorilla $gorilla
+     */
+    public function gorillaIsCorrectlyNamed($name, Gorilla $gorilla)
+    {
+        \PHPUnit_Framework_Assert::assertEquals($name, $gorilla->getName());
+    }
 }
