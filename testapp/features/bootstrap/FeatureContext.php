@@ -22,7 +22,7 @@ use Gorghoa\ScenarioStateBehatExtension\TestApp\Gorilla;
 class FeatureContext implements ScenarioStateAwareContext
 {
     /**
-     * @beforeSuite
+     * @BeforeSuite
      */
     public static function setUpSuite()
     {
@@ -48,6 +48,7 @@ class FeatureContext implements ScenarioStateAwareContext
     public function initBananas()
     {
         $this->scenarioState->provideStateFragment('bananas', ['foo', 'bar']);
+        $this->scenarioState->provideStateFragment('gorillaIsMale', true);
     }
 
     /**
@@ -131,16 +132,35 @@ class FeatureContext implements ScenarioStateAwareContext
     }
 
     /**
-     * @When gives this banana to gorilla
+     * @Transform :gorilla
+     *
+     * @ScenarioStateArgument(name="gorillaIsMale", argument="isMale")
+     *
+     * @param string $gorilla
+     * @param bool   $isMale
+     *
+     * @return Gorilla
+     */
+    public function transformGorilla($gorilla, $isMale)
+    {
+        $monkey = new Gorilla();
+        $monkey->setName($gorilla);
+        $monkey->setMale($isMale);
+
+        return $monkey;
+    }
+
+    /**
+     * @When gives this banana to :gorilla
      *
      * @ScenarioStateArgument("scenarioBanana")
      *
-     * @param string $scenarioBanana
+     * @param string  $scenarioBanana
+     * @param Gorilla $gorilla
      */
-    public function giveBananaToGorilla($scenarioBanana)
+    public function giveBananaToGorilla($scenarioBanana, Gorilla $gorilla)
     {
         \PHPUnit_Framework_Assert::assertEquals('Yammy Banana', $scenarioBanana);
-        $gorilla = new Gorilla();
         $gorilla->setBanana($scenarioBanana);
         $this->scenarioState->provideStateFragment('scenarioGorilla', $gorilla);
     }
@@ -158,5 +178,18 @@ class FeatureContext implements ScenarioStateAwareContext
     {
         \PHPUnit_Framework_Assert::assertEquals('Yammy Banana', $scenarioBanana);
         \PHPUnit_Framework_Assert::assertEquals('Yammy Banana', $gorilla->getBanana());
+    }
+
+    /**
+     * @Then the gorilla is named :name
+     *
+     * @ScenarioStateArgument(name="scenarioGorilla", argument="gorilla")
+     *
+     * @param string  $name
+     * @param Gorilla $gorilla
+     */
+    public function gorillaIsCorrectlyNamed($name, Gorilla $gorilla)
+    {
+        \PHPUnit_Framework_Assert::assertEquals($name, $gorilla->getName());
     }
 }
