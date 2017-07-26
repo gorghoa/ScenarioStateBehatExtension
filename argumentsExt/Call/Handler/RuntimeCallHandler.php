@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the ScenarioStateBehatExtension project.
+ * This file is part of the StepArgumentInjectorBehatExtension project.
  *
  * (c) Rodrigue Villetard <rodrigue.villetard@gmail.com>
  *
@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Gorghoa\ScenarioStateBehatExtension\Call\Handler;
+namespace Gorghoa\StepArgumentInjectorBehatExtension\Call\Handler;
 
 use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Testwork\Call\Call;
 use Behat\Testwork\Call\Handler\CallHandler;
 use Behat\Testwork\Environment\Call\EnvironmentCall;
 use Behat\Testwork\Hook\Call\HookCall;
-use Gorghoa\ScenarioStateBehatExtension\Resolver\ArgumentsResolver;
+use Gorghoa\StepArgumentInjectorBehatExtension\Resolver\ArgumentsResolver;
 
 /**
  * @author Vincent Chalamon <vincent@les-tilleuls.coop>

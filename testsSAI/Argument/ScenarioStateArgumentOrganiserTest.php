@@ -21,10 +21,10 @@ use Prophecy\Prophecy\ObjectProphecy;
 /**
  * @author Vincent Chalamon <vincentchalamon@gmail.com>
  */
-class ScenarioStateArgumentOrganiserTest extends \PHPUnit_Framework_TestCase
+class ArgumentOrganiserTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ScenarioStateArgumentOrganiser
+     * @var ArgumentOrganiser
      */
     private $organiser;
 
@@ -67,7 +67,7 @@ class ScenarioStateArgumentOrganiserTest extends \PHPUnit_Framework_TestCase
         $this->readerMock = $this->prophesize(Reader::class);
         $this->annotationMock = $this->prophesize(ScenarioStateArgument::class);
 
-        $this->organiser = new ScenarioStateArgumentOrganiser(
+        $this->organiser = new ArgumentOrganiser(
             $this->organiserMock->reveal(),
             $this->initializerMock->reveal(),
             $this->readerMock->reveal()

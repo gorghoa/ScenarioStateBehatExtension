@@ -11,13 +11,15 @@
 
 namespace Gorghoa\ScenarioStateBehatExtension\Annotation;
 
+use Gorghoa\StepArgumentInjectorBehatExtension\Annotation\StepInjectorArgument;
+
 /**
  * @author Vincent Chalamon <vincentchalamon@gmail.com>
  *
  * @Annotation
  * @Target("METHOD")
  */
-class ScenarioStateArgument
+class ScenarioStateArgument implements StepInjectorArgument
 {
     /**
      * Argument name in store.

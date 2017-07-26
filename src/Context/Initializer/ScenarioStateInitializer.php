@@ -17,12 +17,13 @@ use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Gorghoa\ScenarioStateBehatExtension\Context\ScenarioStateAwareContext;
 use Gorghoa\ScenarioStateBehatExtension\ScenarioState;
 use Gorghoa\ScenarioStateBehatExtension\ScenarioStateInterface;
+use Gorghoa\StepArgumentInjectorBehatExtension\Argument\StepArgumentHolder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * @author Rodrigue Villetard <rodrigue.villetard@gmail.com>
  */
-class ScenarioStateInitializer implements ContextInitializer, EventSubscriberInterface
+class ScenarioStateInitializer implements ContextInitializer, EventSubscriberInterface, StepArgumentHolder
 {
     /**
      * @var ScenarioStateInterface
@@ -67,5 +68,15 @@ class ScenarioStateInitializer implements ContextInitializer, EventSubscriberInt
     public function getStore()
     {
         return $this->store;
+    }
+
+    public function hasStepArgumentFor($key)
+    {
+        return $this->store->hasStateFragment($key);
+    }
+
+    public function getStepArgumentFor($key)
+    {
+        return $this->store->getStateFragment($key);
     }
 }
