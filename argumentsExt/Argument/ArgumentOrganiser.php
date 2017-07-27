@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the ScenarioStateBehatExtension project.
+ * This file is part of the StepArgumentInjectorBehatExtension project.
  *
  * (c) Rodrigue Villetard <rodrigue.villetard@gmail.com>
  *
@@ -9,39 +9,39 @@
  * file that was distributed with this source code.
  */
 
-namespace Gorghoa\ScenarioStateBehatExtension\Argument;
+namespace Gorghoa\StepArgumentInjectorBehatExtension\Argument;
 
-use Behat\Testwork\Argument\ArgumentOrganiser;
+use Behat\Testwork\Argument\ArgumentOrganiser as BehatArgumentOrganiser;
 use Doctrine\Common\Annotations\Reader;
-use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
-use Gorghoa\ScenarioStateBehatExtension\Context\Initializer\ScenarioStateInitializer;
+use Gorghoa\StepArgumentInjectorBehatExtension\Annotation\StepInjectorArgument;
+// use Gorghoa\StepArgumentInjectorBehatExtension\Context\Initializer\StepArgumentInjectorInitializer;
 use ReflectionFunctionAbstract;
 
 /**
  * @author Rodrigue Villetard <rodrigue.villetard@gmail.com>
  * @author Vincent Chalamon <vincentchalamon@gmail.com>
  */
-final class ScenarioStateArgumentOrganiser implements ArgumentOrganiser
+final class ArgumentOrganiser implements BehatArgumentOrganiser
 {
     /**
-     * @var ArgumentOrganiser
+     * @var BehatArgumentOrganiser
      */
     private $baseOrganiser;
 
     /**
-     * @var ScenarioStateInitializer
+     * @var StepArgumentHolder[]
      */
-    private $store;
+    private $stepArgumentHolders;
 
     /**
      * @var Reader
      */
     private $reader;
 
-    public function __construct(ArgumentOrganiser $organiser, ScenarioStateInitializer $store, Reader $reader)
+    public function __construct(BehatArgumentOrganiser $organiser, array $stepArgumentHolders, Reader $reader)
     {
         $this->baseOrganiser = $organiser;
-        $this->store = $store;
+        $this->stepArgumentHolders = $stepArgumentHolders;
         $this->reader = $reader;
     }
 
@@ -59,16 +59,22 @@ final class ScenarioStateArgumentOrganiser implements ArgumentOrganiser
             return $this->baseOrganiser->organiseArguments($function, $match);
         }
 
-        /** @var ScenarioStateArgument[] $annotations */
         $annotations = $this->reader->getMethodAnnotations($function);
-        $store = $this->store->getStore();
+
         foreach ($annotations as $annotation) {
-            if ($annotation instanceof ScenarioStateArgument &&
-                in_array($annotation->getArgument(), $paramsKeys) &&
-                $store->hasStateFragment($annotation->getName())
+            if ($annotation instanceof StepInjectorArgument &&
+                in_array($argument = $annotation->getArgument(), $paramsKeys)
             ) {
-                $match[$annotation->getArgument()] = $store->getStateFragment($annotation->getName());
-                $match[strval(++$i)] = $store->getStateFragment($annotation->getName());
+                /* @var StepInjectorArgument $annotation */
+                foreach ($this->stepArgumentHolders as $hooker) {
+                    if ($hooker->doesHandleStepArgument($annotation)) {
+
+                        $match[$argument]
+                            = $match[strval(++$i)]
+                            = $hooker->getStepArgumentValueFor($annotation)
+                        ;
+                    }
+                }
             }
         }
 

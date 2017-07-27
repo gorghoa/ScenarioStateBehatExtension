@@ -27,6 +27,7 @@
 
     "autoload": {
         "psr-4": {
+            "Gorghoa\\StepArgumentInjectorBehatExtension\\": "argumentsExt/",
             "Gorghoa\\ScenarioStateBehatExtension\\": "src/",
             "Symfony\\Component\\Process\\": "vendor/symfony/process/"
         }

@@ -14,5 +14,8 @@
         <testsuite name="ScenarioStateBehatExtension Test Suite">
             <directory>tests</directory>
         </testsuite>
+        <testsuite name="StepArgumentInjectorBehatExtension Test Suite">
+            <directory>testsSAI</directory>
+        </testsuite>
     </testsuites>
 </phpunit>

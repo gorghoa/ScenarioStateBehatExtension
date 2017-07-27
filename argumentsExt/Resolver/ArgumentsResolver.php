@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the ScenarioStateBehatExtension project.
+ * This file is part of the StepArgumentInjectorBehatExtension project.
  *
  * (c) Rodrigue Villetard <rodrigue.villetard@gmail.com>
  *
@@ -9,11 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Gorghoa\ScenarioStateBehatExtension\Resolver;
+namespace Gorghoa\StepArgumentInjectorBehatExtension\Resolver;
 
 use Doctrine\Common\Annotations\Reader;
-use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
-use Gorghoa\ScenarioStateBehatExtension\Context\Initializer\ScenarioStateInitializer;
+use Gorghoa\StepArgumentInjectorBehatExtension\Annotation\StepInjectorArgument;
 
 /**
  * @author Vincent Chalamon <vincent@les-tilleuls.coop>
@@ -21,22 +20,24 @@ use Gorghoa\ScenarioStateBehatExtension\Context\Initializer\ScenarioStateInitial
 class ArgumentsResolver
 {
     /**
-     * @var ScenarioStateInitializer
-     */
-    private $store;
-
-    /**
      * @var Reader
      */
     private $reader;
 
     /**
-     * @param ScenarioStateInitializer $store
-     * @param Reader                   $reader
+     * @var StepArgumentHolder[]
      */
-    public function __construct(ScenarioStateInitializer $store, Reader $reader)
+    private $stepArgumentHolders;
+
+    /**
+     * ArgumentsResolver constructor.
+     *
+     * @param StepArgumentHolder[] $stepArgumentHolders
+     * @param Reader               $reader
+     */
+    public function __construct($stepArgumentHolders, Reader $reader)
     {
-        $this->store = $store;
+        $this->stepArgumentHolders = $stepArgumentHolders;
         $this->reader = $reader;
     }
 
@@ -48,25 +49,27 @@ class ArgumentsResolver
      */
     public function resolve(\ReflectionMethod $function, array $arguments)
     {
-        // No `@ScenarioStateArgument` annotation found
-        if (null === $this->reader->getMethodAnnotation($function, ScenarioStateArgument::class)) {
+        // No `@StepInjectorArgument` annotation found
+        if (null === $this->reader->getMethodAnnotation($function, StepInjectorArgument::class)) {
             return $arguments;
         }
 
         $paramsKeys = array_map(function (\ReflectionParameter $element) {
             return $element->getName();
         }, $function->getParameters());
-        $store = $this->store->getStore();
 
         // Prepare arguments from annotations
-        /** @var ScenarioStateArgument[] $annotations */
         $annotations = $this->reader->getMethodAnnotations($function);
         foreach ($annotations as $annotation) {
-            if ($annotation instanceof ScenarioStateArgument &&
-                in_array($annotation->getArgument(), $paramsKeys) &&
-                $store->hasStateFragment($annotation->getName())
+            if ($annotation instanceof StepInjectorArgument &&
+                in_array($argument = $annotation->getArgument(), $paramsKeys)
             ) {
-                $arguments[$annotation->getArgument()] = $store->getStateFragment($annotation->getName());
+                /* @var StepArgumentInjectorArgument $annotation */
+                foreach ($this->stepArgumentHolders as $hooker) {
+                    if ($hooker->doesHandleStepArgument($annotation)) {
+                        $arguments[$argument] = $hooker->getStepArgumentValueFor($annotation);
+                    }
+                }
             }
         }
 
