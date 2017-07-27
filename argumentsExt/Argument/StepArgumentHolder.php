@@ -11,12 +11,28 @@
 
 namespace Gorghoa\StepArgumentInjectorBehatExtension\Argument;
 
+use Gorghoa\StepArgumentInjectorBehatExtension\Annotation\StepInjectorArgument;
+
 /**
  * @author Rodrigue Villetard <rodrigue.villetard@gmail.com>
  */
 interface StepArgumentHolder
 {
-    public function hasStepArgumentFor($key);
+    /**
+     * Check if an annotation is handled by the service.
+     *
+     * @param StepInjectorArgument $annotation
+     *
+     * @return bool
+     */
+    public function doesHandleStepArgument(StepInjectorArgument $annotation);
 
-    public function getStepArgumentFor($key);
+    /**
+     * Get value to inject for a step argument.
+     *
+     * @param StepInjectorArgument $annotation
+     *
+     * @return mixed
+     */
+    public function getStepArgumentValueFor(StepInjectorArgument $annotation);
 }

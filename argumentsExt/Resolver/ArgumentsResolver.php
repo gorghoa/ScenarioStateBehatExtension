@@ -25,16 +25,19 @@ class ArgumentsResolver
     private $reader;
 
     /**
-     * @var array
+     * @var StepArgumentHolder[]
      */
-    private $hookers;
+    private $stepArgumentHolders;
 
     /**
-     * @param Reader $reader
+     * ArgumentsResolver constructor.
+     *
+     * @param StepArgumentHolder[] $stepArgumentHolders
+     * @param Reader               $reader
      */
-    public function __construct(array $hookers, Reader $reader)
+    public function __construct($stepArgumentHolders, Reader $reader)
     {
-        $this->hookers = $hookers;
+        $this->stepArgumentHolders = $stepArgumentHolders;
         $this->reader = $reader;
     }
 
@@ -56,15 +59,15 @@ class ArgumentsResolver
         }, $function->getParameters());
 
         // Prepare arguments from annotations
-        /** @var StepArgumentInjectorArgument[] $annotations */
         $annotations = $this->reader->getMethodAnnotations($function);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof StepInjectorArgument &&
                 in_array($annotation->getArgument(), $paramsKeys)
             ) {
-                foreach ($this->hookers as $hooker) {
-                    if ($hooker->hasStepArgumentFor($annotation->getName())) {
-                        $arguments[$annotation->getArgument()] = $hooker->getStepArgumentFor($annotation->getName());
+                /* @var StepArgumentInjectorArgument $annotation */
+                foreach ($this->stepArgumentHolders as $hooker) {
+                    if ($hooker->doesHandleStepArgument($annotation)) {
+                        $arguments[$annotation->getArgument()] = $hooker->getStepArgumentValueFor($annotation);
                     }
                 }
             }

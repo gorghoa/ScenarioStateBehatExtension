@@ -14,10 +14,13 @@ namespace Gorghoa\ScenarioStateBehatExtension\Context\Initializer;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\Initializer\ContextInitializer;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
+use Gorghoa\ScenarioStateBehatExtension\Annotation\ScenarioStateArgument;
 use Gorghoa\ScenarioStateBehatExtension\Context\ScenarioStateAwareContext;
 use Gorghoa\ScenarioStateBehatExtension\ScenarioState;
 use Gorghoa\ScenarioStateBehatExtension\ScenarioStateInterface;
+use Gorghoa\StepArgumentInjectorBehatExtension\Annotation\StepInjectorArgument;
 use Gorghoa\StepArgumentInjectorBehatExtension\Argument\StepArgumentHolder;
+use Gorghoa\StepArgumentInjectorBehatExtension\Exception\RejectedAnnotationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -70,13 +73,34 @@ class ScenarioStateInitializer implements ContextInitializer, EventSubscriberInt
         return $this->store;
     }
 
-    public function hasStepArgumentFor($key)
+    /**
+     * Test if this service should handle specific argument injection.
+     *
+     * @param StepInjectorArgument $annotation
+     *
+     * @return bool
+     */
+    public function doesHandleStepArgument(StepInjectorArgument $annotation)
     {
-        return $this->store->hasStateFragment($key);
+        return $annotation instanceof ScenarioStateArgument && $this->store->hasStateFragment($annotation->getName());
     }
 
-    public function getStepArgumentFor($key)
+    /**
+     * Get an argument value to inject.
+     *
+     * @param StepInjectorArgument $annotation
+     *
+     * @throws RejectedAnnotationException
+     *
+     * @return mixed
+     */
+    public function getStepArgumentValueFor(StepInjectorArgument $annotation)
     {
-        return $this->store->getStateFragment($key);
+        if (!($annotation instanceof ScenarioStateArgument)) {
+            $class = get_class($annotation);
+            throw new RejectedAnnotationException("$class not handled by ScenarioStateBehatExtension");
+        }
+
+        return $this->store->getStateFragment($annotation->getName());
     }
 }

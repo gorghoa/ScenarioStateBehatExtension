@@ -9,17 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Gorghoa\StepArgumentInjectorBehatExtension\Annotation;
+namespace Gorghoa\StepArgumentInjectorBehatExtension\Exception;
 
 /**
  * @author Rodrigue Villetard <rodrigue.villetard@gmail.com>
  */
-interface StepInjectorArgument
+class RejectedAnnotationException extends \LogicException
 {
-    /**
-     * The argument name this annotation is targeting to inject.
-     *
-     * @return string
-     */
-    public function getArgument();
 }

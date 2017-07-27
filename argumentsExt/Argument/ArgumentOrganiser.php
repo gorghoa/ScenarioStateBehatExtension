@@ -13,7 +13,6 @@ namespace Gorghoa\StepArgumentInjectorBehatExtension\Argument;
 
 use Behat\Testwork\Argument\ArgumentOrganiser as BehatArgumentOrganiser;
 use Doctrine\Common\Annotations\Reader;
-use Gorghoa\StepArgumentInjectorBehatExtension\Annotation\StepArgumentInjectorArgument;
 use Gorghoa\StepArgumentInjectorBehatExtension\Annotation\StepInjectorArgument;
 // use Gorghoa\StepArgumentInjectorBehatExtension\Context\Initializer\StepArgumentInjectorInitializer;
 use ReflectionFunctionAbstract;
@@ -30,19 +29,19 @@ final class ArgumentOrganiser implements BehatArgumentOrganiser
     private $baseOrganiser;
 
     /**
-     * @var StepArgumentInjectorInitializer
+     * @var StepArgumentHolder[]
      */
-    private $hookers;
+    private $stepArgumentHolders;
 
     /**
      * @var Reader
      */
     private $reader;
 
-    public function __construct(BehatArgumentOrganiser $organiser, array $hookers, Reader $reader)
+    public function __construct(BehatArgumentOrganiser $organiser, array $stepArgumentHolders, Reader $reader)
     {
         $this->baseOrganiser = $organiser;
-        $this->hookers = $hookers;
+        $this->stepArgumentHolders = $stepArgumentHolders;
         $this->reader = $reader;
     }
 
@@ -60,18 +59,18 @@ final class ArgumentOrganiser implements BehatArgumentOrganiser
             return $this->baseOrganiser->organiseArguments($function, $match);
         }
 
-        /** @var StepArgumentInjectorArgument[] $annotations */
         $annotations = $this->reader->getMethodAnnotations($function);
 
         foreach ($annotations as $annotation) {
             if ($annotation instanceof StepInjectorArgument &&
                 in_array($annotation->getArgument(), $paramsKeys)
             ) {
-                foreach ($this->hookers as $hooker) {
-                    if ($hooker->hasStepArgumentFor($annotation->getName())) {
+                /* @var StepInjectorArgument $annotation */
+                foreach ($this->stepArgumentHolders as $hooker) {
+                    if ($hooker->doesHandleStepArgument($annotation)) {
                         $match[$annotation->getArgument()]
                             = $match[strval(++$i)]
-                            = $hooker->getStepArgumentFor($annotation->getName())
+                            = $hooker->getStepArgumentValueFor($annotation)
                         ;
                     }
                 }
