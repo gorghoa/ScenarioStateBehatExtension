@@ -63,12 +63,13 @@ final class ArgumentOrganiser implements BehatArgumentOrganiser
 
         foreach ($annotations as $annotation) {
             if ($annotation instanceof StepInjectorArgument &&
-                in_array($annotation->getArgument(), $paramsKeys)
+                in_array($argument = $annotation->getArgument(), $paramsKeys)
             ) {
                 /* @var StepInjectorArgument $annotation */
                 foreach ($this->stepArgumentHolders as $hooker) {
                     if ($hooker->doesHandleStepArgument($annotation)) {
-                        $match[$annotation->getArgument()]
+
+                        $match[$argument]
                             = $match[strval(++$i)]
                             = $hooker->getStepArgumentValueFor($annotation)
                         ;

@@ -49,7 +49,7 @@ class ArgumentsResolver
      */
     public function resolve(\ReflectionMethod $function, array $arguments)
     {
-        // No `@StepArgumentInjectorArgument` annotation found
+        // No `@StepInjectorArgument` annotation found
         if (null === $this->reader->getMethodAnnotation($function, StepInjectorArgument::class)) {
             return $arguments;
         }
@@ -62,12 +62,12 @@ class ArgumentsResolver
         $annotations = $this->reader->getMethodAnnotations($function);
         foreach ($annotations as $annotation) {
             if ($annotation instanceof StepInjectorArgument &&
-                in_array($annotation->getArgument(), $paramsKeys)
+                in_array($argument = $annotation->getArgument(), $paramsKeys)
             ) {
                 /* @var StepArgumentInjectorArgument $annotation */
                 foreach ($this->stepArgumentHolders as $hooker) {
                     if ($hooker->doesHandleStepArgument($annotation)) {
-                        $arguments[$annotation->getArgument()] = $hooker->getStepArgumentValueFor($annotation);
+                        $arguments[$argument] = $hooker->getStepArgumentValueFor($annotation);
                     }
                 }
             }
