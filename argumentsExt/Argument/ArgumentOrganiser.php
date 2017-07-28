@@ -16,6 +16,7 @@ use Doctrine\Common\Annotations\Reader;
 use Gorghoa\StepArgumentInjectorBehatExtension\Annotation\StepInjectorArgument;
 // use Gorghoa\StepArgumentInjectorBehatExtension\Context\Initializer\StepArgumentInjectorInitializer;
 use ReflectionFunctionAbstract;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @author Rodrigue Villetard <rodrigue.villetard@gmail.com>
@@ -29,19 +30,19 @@ final class ArgumentOrganiser implements BehatArgumentOrganiser
     private $baseOrganiser;
 
     /**
-     * @var StepArgumentHolder[]
+     * @var EventDispatcherInterface[]
      */
-    private $stepArgumentHolders;
+    private $dispatcher;
 
     /**
      * @var Reader
      */
     private $reader;
 
-    public function __construct(BehatArgumentOrganiser $organiser, array $stepArgumentHolders, Reader $reader)
+    public function __construct(BehatArgumentOrganiser $organiser, EventDispatcherInterface $dispatcher, Reader $reader)
     {
         $this->baseOrganiser = $organiser;
-        $this->stepArgumentHolders = $stepArgumentHolders;
+        $this->dispatcher = $dispatcher;
         $this->reader = $reader;
     }
 
@@ -67,6 +68,8 @@ final class ArgumentOrganiser implements BehatArgumentOrganiser
             ) {
                 /* @var StepInjectorArgument $annotation */
                 foreach ($this->stepArgumentHolders as $hooker) {
+                    $this->dispatcher->dispatch('step.resolve_argument');
+                    /*
                     if ($hooker->doesHandleStepArgument($annotation)) {
 
                         $match[$argument]
@@ -74,6 +77,7 @@ final class ArgumentOrganiser implements BehatArgumentOrganiser
                             = $hooker->getStepArgumentValueFor($annotation)
                         ;
                     }
+                    */
                 }
             }
         }

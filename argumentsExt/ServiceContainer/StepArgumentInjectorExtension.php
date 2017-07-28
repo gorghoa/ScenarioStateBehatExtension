@@ -11,6 +11,7 @@
 
 namespace Gorghoa\StepArgumentInjectorBehatExtension\ServiceContainer;
 
+use Behat\Behat\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
@@ -100,6 +101,7 @@ class StepArgumentInjectorExtension implements ExtensionInterface
             ->setPublic(false)
             ->setArguments([
                 new Reference(sprintf('%s.inner', self::STEP_ARGUMENT_INJECTOR_ARGUMENT_ORGANISER_ID)),
+                new Reference(EventDispatcherExtension::DISPATCHER_ID),
                 $taggedServices,
                 new Reference(self::STEP_ARGUMENT_INJECTOR_DOCTRINE_READER_ID),
                 new Reference(self::STEP_ARGUMENT_INJECTOR_ARGUMENTS_RESOLVER_ID),
