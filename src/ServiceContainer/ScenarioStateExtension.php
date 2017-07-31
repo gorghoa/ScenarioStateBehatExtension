@@ -12,11 +12,9 @@
 namespace Gorghoa\ScenarioStateBehatExtension\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
-use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
-use Behat\Testwork\Hook\ServiceContainer\HookExtension;
 use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -81,20 +79,20 @@ class ScenarioStateExtension implements ExtensionInterface
             ->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, ['priority' => 0]);
 
         // Declare Doctrine annotation reader as service
-        $container->register(self::SCENARIO_STATE_DOCTRINE_READER_ID, AnnotationReader::class)
-            // Ignore Behat annotations in reader
-            ->addMethodCall('addGlobalIgnoredName', ['Given'])
-            ->addMethodCall('addGlobalIgnoredName', ['When'])
-            ->addMethodCall('addGlobalIgnoredName', ['Then'])
-            ->addMethodCall('addGlobalIgnoredName', ['Transform'])
-            ->addMethodCall('addGlobalIgnoredName', ['BeforeStep'])
-            ->addMethodCall('addGlobalIgnoredName', ['BeforeScenario'])
-            ->addMethodCall('addGlobalIgnoredName', ['BeforeFeature'])
-            ->addMethodCall('addGlobalIgnoredName', ['BeforeSuite'])
-            ->addMethodCall('addGlobalIgnoredName', ['AfterStep'])
-            ->addMethodCall('addGlobalIgnoredName', ['AfterScenario'])
-            ->addMethodCall('addGlobalIgnoredName', ['AfterFeature'])
-            ->addMethodCall('addGlobalIgnoredName', ['AfterSuite']);
+        $readerDefinition = $container->register(self::SCENARIO_STATE_DOCTRINE_READER_ID, AnnotationReader::class);
+        // Ignore Behat annotations in reader
+        $keywords = [
+            'Given', 'When', 'Then',
+            'Transform',
+            'BeforeStep', 'AfterStep',
+            'BeforeScenario', 'AfterScenario',
+            'BeforeSuite', 'AfterSuite',
+            'BeforeFeature', 'AfterFeature',
+        ];
+        foreach ($keywords as $keyword) {
+            $readerDefinition->addMethodCall('addGlobalIgnoredName', [$keyword]);
+            $readerDefinition->addMethodCall('addGlobalIgnoredName', [strtolower($keyword)]);
+        }
 
         // Arguments resolver: resolve ScenarioState arguments from annotation
         $container->register(self::SCENARIO_STATE_ARGUMENTS_RESOLVER_ID, ArgumentsResolver::class)

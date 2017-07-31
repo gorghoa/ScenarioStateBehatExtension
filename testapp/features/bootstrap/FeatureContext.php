@@ -132,7 +132,7 @@ class FeatureContext implements ScenarioStateAwareContext
     }
 
     /**
-     * @Transform :gorilla
+     * @transform :gorilla
      *
      * @ScenarioStateArgument(name="gorillaIsMale", argument="isMale")
      *
