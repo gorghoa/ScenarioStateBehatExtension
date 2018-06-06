@@ -12,7 +12,7 @@ Feature: Scenario shared state
     When I run "behat --no-colors features/donkeys.feature"
     Then it should fail with:
     """
-    [Behat\Testwork\Argument\Exception\UnknownParameterValueException]
+    Can not find a matching value for an argument
     """
 
   Scenario: Scenario Outline should work properly
