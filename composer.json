@@ -12,7 +12,7 @@
     ],
 
     "require": {
-        "php": ">=5.5",
+        "php": ">=7.0",
         "behat/behat": "^3.0.12",
         "symfony/dependency-injection": "^2.7|^3.0|^4.0",
         "symfony/process": "^2.0|^3.0|^4.0",
