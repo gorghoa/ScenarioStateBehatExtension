@@ -4,6 +4,9 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/gorghoa/ScenarioStateBehatExtension/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/gorghoa/ScenarioStateBehatExtension/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/gorghoa/ScenarioStateBehatExtension/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/gorghoa/ScenarioStateBehatExtension/?branch=master)
 
+
+:warning: This projet is not maintained anymore. Still, anyone interested to take over is welcome to do so :).
+
 ## When to use
 
 Behat scenarios are all about state. First you put the system under test
